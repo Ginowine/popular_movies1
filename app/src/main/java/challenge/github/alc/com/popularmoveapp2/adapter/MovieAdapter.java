@@ -59,8 +59,9 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieAdapter
 
     @Override
     public void onBindViewHolder(final MovieAdapterViewHolder holder, int position) {
-        String image_url = IMAGE_URL_BASE_PATH + movieList.get(position).getPosterPath();
-        //final Movie movies = movieList.get(position);
+       // String image_url = IMAGE_URL_BASE_PATH + movieList.get(position).getPosterPath();
+        final Movie movies = movieList.get(position);
+        String image_url = IMAGE_URL_BASE_PATH + movies.getPosterPath();
 
         Picasso.with(context)
                 .load(image_url)
@@ -73,7 +74,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieAdapter
             public void onClick(View view) {
                 Context context = holder.itemView.getContext();
                 Intent intent = new Intent(context, DetailsActivity.class);
-                //intent.putExtra("movie", movies);
+                intent.putExtra("movie", movies);
                 context.startActivity(intent);
             }
         });

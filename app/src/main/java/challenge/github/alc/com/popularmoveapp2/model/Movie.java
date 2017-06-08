@@ -11,18 +11,14 @@ import java.util.List;
 /**
  * Created by Gino Osahon on 07/06/2017.
  */
-public class Movie{
+public class Movie implements Parcelable{
 
     @SerializedName("poster_path")
     private String posterPath;
-    @SerializedName("adult")
-    private boolean adult;
     @SerializedName("overview")
     private String overview;
     @SerializedName("release_date")
     private String releaseDate;
-    @SerializedName("genre_ids")
-    private List<Integer> genreIds = new ArrayList<Integer>();
     @SerializedName("id")
     private Integer id;
     @SerializedName("original_title")
@@ -37,10 +33,60 @@ public class Movie{
     private Double popularity;
     @SerializedName("vote_count")
     private Integer voteCount;
-    @SerializedName("video")
-    private Boolean video;
     @SerializedName("vote_average")
     private Double voteAverage;
+
+    public Movie(String posterPath,  String overview, String releaseDate, Integer id,
+                 String originalTitle, String originalLanguage, String title, String backdropPath, Double popularity,
+                 Integer voteCount, Double voteAverage) {
+        this.posterPath = posterPath;
+        this.overview = overview;
+        this.releaseDate = releaseDate;
+        this.id = id;
+        this.originalTitle = originalTitle;
+        this.originalLanguage = originalLanguage;
+        this.title = title;
+        this.backdropPath = backdropPath;
+        this.popularity = popularity;
+        this.voteCount = voteCount;
+        this.voteAverage = voteAverage;
+    }
+
+    public Movie (Parcel parcel){
+        this.posterPath = parcel.readString();
+        this.overview = parcel.readString();
+        this.releaseDate = parcel.readString();
+        this.id = parcel.readInt();
+        this.originalTitle = parcel.readString();
+        this.originalLanguage = parcel.readString();
+        this.title = parcel.readString();
+        this.backdropPath = parcel.readString();
+        this.popularity = parcel.readDouble();
+        this.voteCount = parcel.readInt();
+        this.voteAverage = parcel.readDouble();
+
+
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeString(posterPath);
+        parcel.writeString(overview);
+        parcel.writeString(releaseDate);
+        parcel.writeInt(id);
+        parcel.writeString(originalTitle);
+        parcel.writeString(originalLanguage);
+        parcel.writeString(title);
+        parcel.writeString(backdropPath);
+        parcel.writeDouble(popularity);
+        parcel.writeInt(voteCount);
+        parcel.writeDouble(voteAverage);
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
 
 
     public String getPosterPath() {
@@ -49,14 +95,6 @@ public class Movie{
 
     public void setPosterPath(String posterPath) {
         this.posterPath = posterPath;
-    }
-
-    public boolean isAdult() {
-        return adult;
-    }
-
-    public void setAdult(boolean adult) {
-        this.adult = adult;
     }
 
     public String getOverview() {
@@ -73,14 +111,6 @@ public class Movie{
 
     public void setReleaseDate(String releaseDate) {
         this.releaseDate = releaseDate;
-    }
-
-    public List<Integer> getGenreIds() {
-        return genreIds;
-    }
-
-    public void setGenreIds(List<Integer> genreIds) {
-        this.genreIds = genreIds;
     }
 
     public Integer getId() {
@@ -139,14 +169,6 @@ public class Movie{
         this.voteCount = voteCount;
     }
 
-    public Boolean getVideo() {
-        return video;
-    }
-
-    public void setVideo(Boolean video) {
-        this.video = video;
-    }
-
     public Double getVoteAverage() {
         return voteAverage;
     }
@@ -154,4 +176,16 @@ public class Movie{
     public void setVoteAverage(Double voteAverage) {
         this.voteAverage = voteAverage;
     }
+
+    public static final Parcelable.Creator<Movie> CREATOR = new Parcelable.Creator<Movie>(){
+        @Override
+        public Movie createFromParcel(Parcel parcel) {
+            return new Movie(parcel);
+        }
+
+        @Override
+        public Movie[] newArray(int size) {
+            return new Movie[size];
+        }
+    };
 }

@@ -38,12 +38,9 @@ public class MainActivity extends AppCompatActivity {
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        //MovieAdapter movieAdapter = new MovieAdapter();
-        //recyclerView.setAdapter(movieAdapter);
 
         mProgressBar = (ProgressBar) findViewById(R.id.progressBar);
         retrofitGetDataFromApi();
-        //movieAdapter.notifyDataSetChanged();
 
     }
 
@@ -69,12 +66,12 @@ public class MainActivity extends AppCompatActivity {
         call.enqueue(new Callback<MovieResponse>() {
             @Override
             public void onResponse(Call<MovieResponse> call, Response<MovieResponse> response) {
-                //MovieResponse movieResponse = response.body().getResults();
-                List<Movie> result = response.body().getResults();
-                recyclerView.setAdapter(new MovieAdapter(result, R.layout.list_item_view, getApplicationContext()));
-                //sendDataToAdapter(movieResponse);
+                MovieResponse movieResponse = response.body();
+                //List<Movie> result = response.body().getResults();
+                //recyclerView.setAdapter(new MovieAdapter(result, R.layout.list_item_view, getApplicationContext()));
+                sendDataToAdapter(movieResponse);
 
-                Log.d(TAG, "Number of movies received: " + result.size());
+                Log.d(TAG, "Number of movies received: " + movieResponse.size());
 
             }
 

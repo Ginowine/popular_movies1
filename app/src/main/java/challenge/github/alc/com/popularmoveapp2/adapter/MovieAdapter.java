@@ -21,6 +21,7 @@ import challenge.github.alc.com.popularmoveapp2.model.Movie;
  */
 public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieAdapterViewHolder>{
 
+    public static final String IMAGE_URL_BASE_PATH="http://image.tmdb.org/t/p/w342//";
     public List<Movie> movieList;
     private int rowLayout;
     private Context context;
@@ -36,39 +37,8 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieAdapter
 
     }
 
-    @Override
-    public MovieAdapterViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View itemView = LayoutInflater.from(parent.getContext()).inflate(rowLayout, parent, false);
-        return new MovieAdapterViewHolder(itemView);
-    }
 
-    @Override
-    public void onBindViewHolder(final MovieAdapterViewHolder holder, int position) {
-        final Movie movies = movieList.get(position);
-
-        Picasso.with(context)
-                .load(movies.getBackdrop_url())
-                .placeholder(android.R.drawable.sym_def_app_icon)
-                .error(android.R.drawable.sym_def_app_icon)
-                .into(holder.backdropImage);
-
-        holder.itemView.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View view) {
-                Context context = holder.itemView.getContext();
-                Intent intent = new Intent(context, DetailsActivity.class);
-                intent.putExtra("movie", movies);
-                context.startActivity(intent);
-            }
-        });
-
-    }
-
-    @Override
-    public int getItemCount() {
-        return movieList.size();
-    }
-
+    //A view holder inner class where we get reference to the views in the layout using their ID
     public static class MovieAdapterViewHolder extends RecyclerView.ViewHolder{
         ImageView backdropImage;
 
@@ -79,5 +49,39 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieAdapter
 
         }
 
+    }
+
+    @Override
+    public MovieAdapterViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View itemView = LayoutInflater.from(parent.getContext()).inflate(rowLayout, parent, false);
+        return new MovieAdapterViewHolder(itemView);
+    }
+
+    @Override
+    public void onBindViewHolder(final MovieAdapterViewHolder holder, int position) {
+        String image_url = IMAGE_URL_BASE_PATH + movieList.get(position).getPosterPath();
+        //final Movie movies = movieList.get(position);
+
+        Picasso.with(context)
+                .load(image_url)
+                .placeholder(android.R.drawable.sym_def_app_icon)
+                .error(android.R.drawable.sym_def_app_icon)
+                .into(holder.backdropImage);
+
+        holder.itemView.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                Context context = holder.itemView.getContext();
+                Intent intent = new Intent(context, DetailsActivity.class);
+                //intent.putExtra("movie", movies);
+                context.startActivity(intent);
+            }
+        });
+
+    }
+
+    @Override
+    public int getItemCount() {
+        return movieList.size();
     }
 }

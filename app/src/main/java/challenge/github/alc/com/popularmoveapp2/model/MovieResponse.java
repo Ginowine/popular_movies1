@@ -1,5 +1,7 @@
 package challenge.github.alc.com.popularmoveapp2.model;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -10,11 +12,14 @@ import java.util.Map;
  */
 public class MovieResponse {
 
+    @SerializedName("page")
     private int page;
-    private List<Movie> movies = new ArrayList<Movie>();
-    private int totalPages;
+    @SerializedName("results")
+    private List<Movie> results;
+    @SerializedName("total_results")
     private int totalResults;
-    private Map<String, Object> additionalProperties = new HashMap<String, Object>();
+    @SerializedName("total_pages")
+    private int totalPages;
 
 
     public int getPage() {
@@ -25,20 +30,12 @@ public class MovieResponse {
         this.page = page;
     }
 
-    public List<Movie> getMovies() {
-        return movies;
+    public List<Movie> getResults() {
+        return results;
     }
 
-    public void setMovies(List<Movie> movies) {
-        this.movies = movies;
-    }
-
-    public int getTotalPages() {
-        return totalPages;
-    }
-
-    public void setTotalPages(int totalPages) {
-        this.totalPages = totalPages;
+    public void setResults(List<Movie> results) {
+        this.results = results;
     }
 
     public int getTotalResults() {
@@ -49,11 +46,15 @@ public class MovieResponse {
         this.totalResults = totalResults;
     }
 
-    public Map<String, Object> getAdditionalProperties() {
-        return additionalProperties;
+    public int getTotalPages() {
+        return totalPages;
     }
 
-    public void setAdditionalProperties(Map<String, Object> additionalProperties) {
-        this.additionalProperties = additionalProperties;
+    public void setTotalPages(int totalPages) {
+        this.totalPages = totalPages;
+    }
+
+    public int size(){
+        return results.size();
     }
 }

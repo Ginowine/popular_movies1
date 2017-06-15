@@ -30,4 +30,5 @@ dependencies {
     compile 'com.squareup.picasso:picasso:2.5.2'
     compile 'me.saket:better-link-movement-method:1.2'
     compile 'com.android.support:design:25.0.0'
+    compile 'com.github.frankiesardo:linearlistview:1.0.1@aar'
 }

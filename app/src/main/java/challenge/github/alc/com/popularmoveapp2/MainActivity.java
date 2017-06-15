@@ -12,7 +12,9 @@ import java.util.List;
 import challenge.github.alc.com.popularmoveapp2.adapter.MovieAdapter;
 import challenge.github.alc.com.popularmoveapp2.model.Movie;
 import challenge.github.alc.com.popularmoveapp2.model.MovieResponse;
+import challenge.github.alc.com.popularmoveapp2.model.Review;
 import challenge.github.alc.com.popularmoveapp2.networkUtill.ApiCallService;
+import challenge.github.alc.com.popularmoveapp2.networkUtill.InitRetrofit;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -49,19 +51,13 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+
     private void retrofitGetDataFromApi(){
+        InitRetrofit initRetrofit = new InitRetrofit();
 
+        ApiCallService apiCalls1 = initRetrofit.buildRetrofit();
 
-        if (retrofit == null){
-            retrofit = new Retrofit.Builder()
-                    .baseUrl(BASE_URL)
-                    .addConverterFactory(GsonConverterFactory.create())
-                    .build();
-        }
-
-        ApiCallService apiCalls = retrofit.create(ApiCallService.class);
-
-        Call<MovieResponse> call = apiCalls.getMovies(API_KEY, SORT_BY);
+        Call<MovieResponse> call = apiCalls1.getMovies(API_KEY, SORT_BY);
 
         call.enqueue(new Callback<MovieResponse>() {
             @Override
@@ -83,4 +79,5 @@ public class MainActivity extends AppCompatActivity {
 
 
     }
+
 }

@@ -1,6 +1,8 @@
 package challenge.github.alc.com.popularmoveapp2.networkUtill;
 
 import challenge.github.alc.com.popularmoveapp2.model.MovieResponse;
+import challenge.github.alc.com.popularmoveapp2.model.Review;
+import challenge.github.alc.com.popularmoveapp2.model.Trailer;
 import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Query;
@@ -12,4 +14,10 @@ public interface ApiCallService {
 
     @GET("movie/top_rated")
     Call<MovieResponse> getMovies(@Query("api_key") String apiKey, @Query("q") String params);
+
+    @GET("movie/reviews")
+    Call<Review> getMovieReviews(@Query("q") String params, @Query("api_key") String apiKey, @Query("q") String param);
+
+    @GET("movie/videos")
+    Call<Trailer> getMovieTrailer(@Query("q") String params, @Query("api_key") String apiKey, @Query("q") String param);
 }

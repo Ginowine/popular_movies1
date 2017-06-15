@@ -5,9 +5,6 @@ import android.os.Parcelable;
 
 import com.google.gson.annotations.SerializedName;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * Created by Gino Osahon on 07/06/2017.
  */
@@ -20,7 +17,7 @@ public class Movie implements Parcelable{
     @SerializedName("release_date")
     private String releaseDate;
     @SerializedName("id")
-    private Integer id;
+    private int id;
     @SerializedName("original_title")
     private String originalTitle;
     @SerializedName("original_language")
@@ -35,10 +32,14 @@ public class Movie implements Parcelable{
     private Integer voteCount;
     @SerializedName("vote_average")
     private Double voteAverage;
+    @SerializedName("genre")
+    private String genre;
+    private Long rating;
+    private long movie_id;
 
-    public Movie(String posterPath,  String overview, String releaseDate, Integer id,
+    public Movie(String posterPath,  String overview, String releaseDate, int id,
                  String originalTitle, String originalLanguage, String title, String backdropPath, Double popularity,
-                 Integer voteCount, Double voteAverage) {
+                 Integer voteCount, Double voteAverage, String genre, Long rating, long movieId) {
         this.posterPath = posterPath;
         this.overview = overview;
         this.releaseDate = releaseDate;
@@ -50,6 +51,13 @@ public class Movie implements Parcelable{
         this.popularity = popularity;
         this.voteCount = voteCount;
         this.voteAverage = voteAverage;
+        this.genre = genre;
+        this.rating = rating;
+        this.movie_id = movieId;
+    }
+
+    public  Movie(){
+
     }
 
     public Movie (Parcel parcel){
@@ -64,6 +72,9 @@ public class Movie implements Parcelable{
         this.popularity = parcel.readDouble();
         this.voteCount = parcel.readInt();
         this.voteAverage = parcel.readDouble();
+        this.genre = parcel.readString();
+        this.rating = parcel.readLong();
+        this.movie_id = parcel.readLong();
 
 
     }
@@ -81,6 +92,9 @@ public class Movie implements Parcelable{
         parcel.writeDouble(popularity);
         parcel.writeInt(voteCount);
         parcel.writeDouble(voteAverage);
+        parcel.writeString(genre);
+        parcel.writeString(String.valueOf(rating));
+        parcel.writeString(String.valueOf(movie_id));
     }
 
     @Override
@@ -177,6 +191,31 @@ public class Movie implements Parcelable{
         this.voteAverage = voteAverage;
     }
 
+    public String getGenre() {
+        return genre;
+    }
+
+    public void setGenre(String genre) {
+        this.genre = genre;
+    }
+
+    public Long getRating() {
+        return rating;
+    }
+
+    public void setRating(Long rating) {
+        this.rating = rating;
+    }
+
+    public long getMovie_id() {
+        return movie_id;
+    }
+
+    public void setMovie_id(long movie_id) {
+        this.movie_id = movie_id;
+    }
+
+
     public static final Parcelable.Creator<Movie> CREATOR = new Parcelable.Creator<Movie>(){
         @Override
         public Movie createFromParcel(Parcel parcel) {
@@ -188,4 +227,7 @@ public class Movie implements Parcelable{
             return new Movie[size];
         }
     };
+
+
+
 }

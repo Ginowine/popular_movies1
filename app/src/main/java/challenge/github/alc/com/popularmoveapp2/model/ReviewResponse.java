@@ -16,7 +16,7 @@ public class ReviewResponse {
     @SerializedName("page")
     private Integer page;
     @SerializedName("results")
-    private List<Review> results = null;
+    private List<Review> results;
     @SerializedName("total_pages")
     private Integer totalPages;
     @SerializedName("total_results")
@@ -61,5 +61,9 @@ public class ReviewResponse {
 
     public void setTotalResults(Integer totalResults) {
         this.totalResults = totalResults;
+    }
+
+    public int size(){
+        return results.size();
     }
 }

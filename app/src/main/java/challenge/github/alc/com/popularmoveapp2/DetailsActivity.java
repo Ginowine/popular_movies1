@@ -144,7 +144,7 @@ public class DetailsActivity extends AppCompatActivity {
 
         ApiCallService apiCalls2 = initRetrofit.buildRetrofit();
 
-        Call<ReviewResponse> call = apiCalls2.getMovieReviews(String.valueOf(movie_id),REVIEW, API_KEY);
+        Call<ReviewResponse> call = apiCalls2.getMovieReviews(String.valueOf(movie_id) ,REVIEW, API_KEY);
 
         call.enqueue(new Callback<ReviewResponse>() {
             @Override
@@ -153,6 +153,8 @@ public class DetailsActivity extends AppCompatActivity {
                 ReviewResponse reviewResponse = response.body();
                 //review = response.body();
                 passDataToAdapter(reviewResponse);
+
+                Log.d(TAG, "Number of movies received: " + reviewResponse.size());
             }
 
             @Override
@@ -165,7 +167,7 @@ public class DetailsActivity extends AppCompatActivity {
     private void passDataToAdapter(ReviewResponse reviewResponse) {
         if (reviewResponse != null){
             mReviewsCardview.setVisibility(View.VISIBLE);
-            mReviewAdapter = new ReviewAdapter(context, reviewResponse.getResults());
+            mReviewAdapter = new ReviewAdapter(getApplicationContext(), reviewResponse.getResults());
             mReviewsView.setAdapter(mReviewAdapter);
         }
     }

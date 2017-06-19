@@ -11,6 +11,7 @@ import android.widget.TextView;
 import java.util.List;
 
 import challenge.github.alc.com.popularmoveapp2.R;
+import challenge.github.alc.com.popularmoveapp2.model.Movie;
 import challenge.github.alc.com.popularmoveapp2.model.Review;
 
 /**
@@ -20,14 +21,14 @@ public class ReviewAdapter extends BaseAdapter {
 
     private  Context mContext;
     private  LayoutInflater mInflater;
-    private  Review mReview;
+    public List<Review> mReview;
 
-    public ReviewAdapter(Context context, Review object) {
+    public ReviewAdapter(Context context, List<Review> review) {
         mContext = context;
         mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        mReview = object;
+        mReview = review;
 
-        mReview = new Review();
+        //mReview = new Review();
     }
 
     public ReviewAdapter(){
@@ -64,6 +65,8 @@ public class ReviewAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup viewGroup) {
 
+        final Review review = mReview.get(position);
+
         View view = convertView;
         ReviewAdapterViewHolder viewHolder;
 
@@ -74,8 +77,8 @@ public class ReviewAdapter extends BaseAdapter {
         }
         viewHolder = (ReviewAdapterViewHolder) view.getTag();
 
-        viewHolder.authorView.setText(mReview.getAuthor());
-        viewHolder.contentView.setText(Html.fromHtml(mReview.getContent()));
+        viewHolder.authorView.setText(review.getAuthor());
+        viewHolder.contentView.setText(Html.fromHtml(review.getContent()));
 
         return view;
     }

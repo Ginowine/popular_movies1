@@ -24,6 +24,7 @@ import challenge.github.alc.com.popularmoveapp2.adapter.ReviewAdapter;
 import challenge.github.alc.com.popularmoveapp2.adapter.TrailerAdapter;
 import challenge.github.alc.com.popularmoveapp2.model.Movie;
 import challenge.github.alc.com.popularmoveapp2.model.Review;
+import challenge.github.alc.com.popularmoveapp2.model.ReviewResponse;
 import challenge.github.alc.com.popularmoveapp2.model.Trailer;
 import challenge.github.alc.com.popularmoveapp2.networkUtill.ApiCallService;
 import challenge.github.alc.com.popularmoveapp2.networkUtill.InitRetrofit;
@@ -143,27 +144,28 @@ public class DetailsActivity extends AppCompatActivity {
 
         ApiCallService apiCalls2 = initRetrofit.buildRetrofit();
 
-        Call<Review> call = apiCalls2.getMovieReviews(String.valueOf(movie_id),REVIEW, API_KEY);
+        Call<ReviewResponse> call = apiCalls2.getMovieReviews(String.valueOf(movie_id),REVIEW, API_KEY);
 
-        call.enqueue(new Callback<Review>() {
+        call.enqueue(new Callback<ReviewResponse>() {
             @Override
-            public void onResponse(Call<Review> call, Response<Review> response) {
-                //List<Review> reviews = response.body();
-                review = response.body();
-                passDataToAdapter(review);
+            public void onResponse(Call<ReviewResponse> call, Response<ReviewResponse> response) {
+              // List<Review> reviews = response.body();
+                ReviewResponse reviewResponse = response.body();
+                //review = response.body();
+                passDataToAdapter(reviewResponse);
             }
 
             @Override
-            public void onFailure(Call<Review> call, Throwable t) {
+            public void onFailure(Call<ReviewResponse> call, Throwable t) {
 
             }
         });
     }
 
-    private void passDataToAdapter(Review review) {
-        if (review != null){
+    private void passDataToAdapter(ReviewResponse reviewResponse) {
+        if (reviewResponse != null){
             mReviewsCardview.setVisibility(View.VISIBLE);
-            mReviewAdapter = new ReviewAdapter(context, review);
+            mReviewAdapter = new ReviewAdapter(context, reviewResponse.getResults());
             mReviewsView.setAdapter(mReviewAdapter);
         }
     }

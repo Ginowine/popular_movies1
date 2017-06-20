@@ -49,17 +49,17 @@ public class ReviewAdapter extends BaseAdapter {
 
     @Override
     public int getCount() {
-        return 0;
+        return mReview.size();
     }
 
     @Override
     public Object getItem(int i) {
-        return null;
+        return mReview.get(i);
     }
 
     @Override
     public long getItemId(int i) {
-        return 0;
+        return Long.parseLong(mReview.get(i).getId());
     }
 
     @Override

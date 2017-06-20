@@ -1,12 +1,17 @@
 package challenge.github.alc.com.popularmoveapp2.model;
 
+import com.google.gson.annotations.SerializedName;
+
 /**
  * Created by Gino Osahon on 11/06/2017.
  */
 public class Review {
 
+    @SerializedName("id")
     private String id;
+    @SerializedName("author")
     private String author;
+    @SerializedName("content")
     private String content;
 
 

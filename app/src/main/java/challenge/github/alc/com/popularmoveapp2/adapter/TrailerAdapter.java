@@ -10,8 +10,10 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
+import java.util.List;
+
 import challenge.github.alc.com.popularmoveapp2.R;
-import challenge.github.alc.com.popularmoveapp2.model.Trailer;
+import challenge.github.alc.com.popularmoveapp2.model.Videos;
 
 /**
  * Created by Gino Osahon on 11/06/2017.
@@ -20,27 +22,28 @@ public class TrailerAdapter extends BaseAdapter {
 
     private Context mContext;
     private LayoutInflater mInflater;
-    private Trailer mTrailer = new Trailer();
+    //private Trailer mTrailer = new Trailer();
+    List<Videos> mVideo;
 
-    public TrailerAdapter(Context context, Trailer object){
+    public TrailerAdapter(Context context, List<Videos> video){
         mContext = context;
         mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        mTrailer = object;
+        mVideo = video;
     }
 
     @Override
     public int getCount() {
-        return 0;
+        return mVideo.size();
     }
 
     @Override
     public Object getItem(int i) {
-        return null;
+        return mVideo.get(i);
     }
 
     @Override
     public long getItemId(int i) {
-        return 0;
+        return Long.parseLong(mVideo.get(i).getId());
     }
 
     public static class TrailerAdapterViewHolder{
@@ -58,6 +61,8 @@ public class TrailerAdapter extends BaseAdapter {
     @Override
     public View getView(int i, View convertView, ViewGroup viewGroup) {
 
+        final Videos videos = mVideo.get(i);
+
         View view = convertView;
         TrailerAdapterViewHolder viewHolder;
 
@@ -67,9 +72,9 @@ public class TrailerAdapter extends BaseAdapter {
             view.setTag(viewHolder);
         }
         viewHolder = (TrailerAdapterViewHolder) view.getTag();
-        viewHolder.nameView.setText(mTrailer.getName());
+        viewHolder.nameView.setText(videos.getName());
 
-        String yt_thumbnail_url = "http://img.youtube.com/vi/" + mTrailer.getKey() + "/0.jpg";
+        String yt_thumbnail_url = "http://img.youtube.com/vi/" + videos.getKey() + "/0.jpg";
 
         Picasso.with(mContext)
                 .load(yt_thumbnail_url)

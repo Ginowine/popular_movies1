@@ -3,17 +3,15 @@ package challenge.github.alc.com.popularmoveapp2;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.provider.MediaStore;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.CardView;
-import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
@@ -21,19 +19,19 @@ import com.squareup.picasso.Picasso;
 
 
 import challenge.github.alc.com.popularmoveapp2.adapter.ReviewAdapter;
+//import challenge.github.alc.com.popularmoveapp2.adapter.TrailerAdapter;
 import challenge.github.alc.com.popularmoveapp2.adapter.TrailerAdapter;
 import challenge.github.alc.com.popularmoveapp2.model.Movie;
 import challenge.github.alc.com.popularmoveapp2.model.Review;
 import challenge.github.alc.com.popularmoveapp2.model.ReviewResponse;
-import challenge.github.alc.com.popularmoveapp2.model.Trailer;
+import challenge.github.alc.com.popularmoveapp2.model.VideoResponse;
+import challenge.github.alc.com.popularmoveapp2.model.Videos;
 import challenge.github.alc.com.popularmoveapp2.networkUtill.ApiCallService;
 import challenge.github.alc.com.popularmoveapp2.networkUtill.InitRetrofit;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import com.linearlistview.LinearListView;
-
-import java.util.List;
 
 public class DetailsActivity extends AppCompatActivity {
 
@@ -74,8 +72,9 @@ public class DetailsActivity extends AppCompatActivity {
     private int mMovie_id;
     private Context context;
 
-    private Trailer trailer;
-    private Review review;
+    private ProgressBar mLoadingIndicator;
+
+    //private Trailer trailer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -102,6 +101,7 @@ public class DetailsActivity extends AppCompatActivity {
 
         mTrailersView = (LinearListView) findViewById(R.id.detail_trailers);
         mReviewsView = (LinearListView) findViewById(R.id.detail_reviews);
+        mLoadingIndicator = (ProgressBar) findViewById(R.id.loading_indicator);
 
         initRetrofit = new InitRetrofit();
         movie = getIntent().getParcelableExtra("movie");
@@ -119,6 +119,11 @@ public class DetailsActivity extends AppCompatActivity {
             displayDetails(mOverview, mReleaseDate, mTitle, mPostalPath, mRating);
         }else {
             mDetailLayout.setVisibility(View.INVISIBLE);
+        }
+
+        if (movie != null){
+            getReviewsFromAPI(movie.getId());
+            getTrailerFromAPI(movie.getId());
         }
     }
 
@@ -143,8 +148,9 @@ public class DetailsActivity extends AppCompatActivity {
     private void getReviewsFromAPI(int movie_id){
 
         ApiCallService apiCalls2 = initRetrofit.buildRetrofit();
+        mLoadingIndicator.setVisibility(View.VISIBLE);
 
-        Call<ReviewResponse> call = apiCalls2.getMovieReviews(String.valueOf(movie_id) ,REVIEW, API_KEY);
+        Call<ReviewResponse> call = apiCalls2.getMovieReviews(String.valueOf(movie_id) , REVIEW, API_KEY);
 
         call.enqueue(new Callback<ReviewResponse>() {
             @Override
@@ -153,8 +159,8 @@ public class DetailsActivity extends AppCompatActivity {
                 ReviewResponse reviewResponse = response.body();
                 //review = response.body();
                 passDataToAdapter(reviewResponse);
-
-                Log.d(TAG, "Number of movies received: " + reviewResponse.size());
+                mLoadingIndicator.setVisibility(View.INVISIBLE);
+                Log.d(TAG, "Number of Reviews received: " + reviewResponse.size());
             }
 
             @Override
@@ -175,32 +181,36 @@ public class DetailsActivity extends AppCompatActivity {
     private void getTrailerFromAPI(long movieId){
         ApiCallService apiCallService = initRetrofit.buildRetrofit();
 
-        Call<Trailer> call = apiCallService.getMovieTrailer(String.valueOf(movieId), TRAILERS, API_KEY );
-        call.enqueue(new Callback<Trailer>() {
+        Call<VideoResponse> call = apiCallService.getMovieTrailer(String.valueOf(movieId), TRAILERS, API_KEY );
+        call.enqueue(new Callback<VideoResponse>() {
             @Override
-            public void onResponse(Call<Trailer> call, Response<Trailer> response) {
-                trailer = response.body();
-                passTrailerToAdapter(trailer);
+            public void onResponse(Call<VideoResponse> call, Response<VideoResponse> response) {
+                VideoResponse videoResponse = response.body();
+                passTrailerToAdapter(videoResponse);
+
+                Log.d(TAG, "Number of Reviews received: " + videoResponse.size());
             }
 
             @Override
-            public void onFailure(Call<Trailer> call, Throwable t) {
+            public void onFailure(Call<VideoResponse> call, Throwable t) {
 
             }
         });
     }
 
-    private void passTrailerToAdapter(final Trailer trailer) {
-        if (trailer != null){
+    private void passTrailerToAdapter(final VideoResponse response) {
+        if (response != null){
             mTrailersCardview.setVisibility(View.VISIBLE);
-            mTrailerAdapter = new TrailerAdapter(context,trailer);
+            mTrailerAdapter = new TrailerAdapter(getApplicationContext(),response.getResults());
             mTrailersView.setAdapter(mTrailerAdapter);
+
+            final Videos videos = new Videos();
 
             mTrailersView.setOnItemClickListener(new LinearListView.OnItemClickListener(){
                 @Override
                 public void onItemClick(LinearListView parent, View view, int position, long id) {
                     Intent intent = new Intent(Intent.ACTION_VIEW);
-                    intent.setData(Uri.parse("http://www.youtube.com/watch?v=" + trailer.getKey()));
+                    intent.setData(Uri.parse("http://www.youtube.com/watch?v=" + videos.getKey()));
                 }
             });
         }
@@ -209,9 +219,5 @@ public class DetailsActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        if (movie != null){
-            getReviewsFromAPI(movie.getId());
-            getTrailerFromAPI(movie.getId());
-        }
     }
 }

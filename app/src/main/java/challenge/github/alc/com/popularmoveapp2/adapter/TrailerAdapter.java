@@ -43,7 +43,8 @@ public class TrailerAdapter extends BaseAdapter {
 
     @Override
     public long getItemId(int i) {
-        return Long.parseLong(mVideo.get(i).getId());
+        //return Long.parseLong(mVideo.get(i).getId());
+        return i;
     }
 
     public static class TrailerAdapterViewHolder{

@@ -2,13 +2,23 @@ package challenge.github.alc.com.popularmoveapp2;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.provider.MediaStore;
 import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.design.widget.FloatingActionButton;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.preference.PreferenceManager;
 import android.support.v7.widget.CardView;
+import android.support.v7.widget.ShareActionProvider;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -28,10 +38,14 @@ import challenge.github.alc.com.popularmoveapp2.model.VideoResponse;
 import challenge.github.alc.com.popularmoveapp2.model.Videos;
 import challenge.github.alc.com.popularmoveapp2.networkUtill.ApiCallService;
 import challenge.github.alc.com.popularmoveapp2.networkUtill.InitRetrofit;
+import challenge.github.alc.com.popularmoveapp2.sync.FavoritesFunctionalities;
+import okhttp3.internal.Util;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import com.linearlistview.LinearListView;
+
+import java.util.List;
 
 public class DetailsActivity extends AppCompatActivity {
 
@@ -71,10 +85,18 @@ public class DetailsActivity extends AppCompatActivity {
     private String mBackDrop;
     private int mMovie_id;
     private Context context;
+    private ShareActionProvider mShareActionProvider;
+    private VideoResponse videoResponse;
+    private FloatingActionButton fab;
+
+    //List<Videos> mVideo;
 
     private ProgressBar mLoadingIndicator;
 
     //private Trailer trailer;
+
+    Videos mVideo = new Videos();
+    FavoritesFunctionalities favoritesService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,11 +105,13 @@ public class DetailsActivity extends AppCompatActivity {
 
         //Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         //setSupportActionBar(toolbar);
+        context = getApplicationContext();
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         //cab = (CollapsingToolbarLayout) findViewById(R.id.toolbar_layout);
         //cab.setTitleEnabled(false);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
+        favoritesService = new FavoritesFunctionalities(getApplicationContext());
 
         imagePoster = (ImageView) findViewById(R.id.detail_image);
         overview = (TextView) findViewById(R.id.movie_overview);
@@ -125,6 +149,97 @@ public class DetailsActivity extends AppCompatActivity {
             getReviewsFromAPI(movie.getId());
             getTrailerFromAPI(movie.getId());
         }
+
+        setupSharedPreferences();
+        setupFloatingActionButton();
+    }
+
+    private void setupSharedPreferences() {
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        // COMPLETED (3) Get the value of the show_bass checkbox preference and use it to call setShowBass
+        boolean isFavorite = sharedPreferences.getBoolean("add_to_favorite", true);
+    }
+
+    /**
+     * Setup the floating button of add to favourite
+     */
+    private void setupFloatingActionButton() {
+        fab = (FloatingActionButton) findViewById(R.id.fab);
+
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (favoritesService.isFavorite(movie)) {
+                    favoritesService.removeFromFavorites(movie);
+                        Utility.showToast(getApplicationContext(), "Removed from Favourite!");
+                    fab.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_thumb_up_white_24dp));
+                        //fab.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_thumb_up_white_24dp));
+
+                } else {
+                    favoritesService.addToFavorites(movie);
+                        Utility.showToast(getApplicationContext(), "Added to Favourite!");
+                        //fab.setImageResource(ContextCompat.getDrawable(context, R.drawable.ic_thumb_down_white_24dp));
+                        //fab.setImageDrawable(getResources().getDrawable(R.drawable.ic_thumb_down_white_24dp, getApplicationContext().getTheme()));
+                        //fab.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_thumb_down_white_24dp));
+                        fab.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_thumb_down_white_24dp));
+                }
+            }
+        });
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+
+        MenuInflater inflater = getMenuInflater();
+        if (movie != null){
+            inflater.inflate(R.menu.menu_detail, menu);
+            final MenuItem action_favorite = menu.findItem(R.id.action_favorite);
+            MenuItem action_share = menu.findItem(R.id.action_share);
+//
+//            new AsyncTask<Void, Void, Integer>(){
+//
+//                @Override
+//                protected Integer doInBackground(Void... voids) {
+//                    return Utility.isFavorited(context, movie.getId());
+//                }
+//
+//                @Override
+//                protected void onPostExecute(Integer isFavorited) {
+//                    action_favorite.setIcon(isFavorited == 1 ?
+//                            R.drawable.abc_btn_rating_star_on_mtrl_alpha :
+//                            R.drawable.abc_btn_rating_star_off_mtrl_alpha);
+//                }
+//
+//            }.execute();
+//            mShareActionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(action_share);
+//            if (videoResponse != null) {
+//                mShareActionProvider.setShareIntent(createShareMovieIntent());
+//            }
+        }
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        int id = item.getItemId();
+        if (id == R.id.action_favorite){
+            Intent startSettingsActivity = new Intent(this, SettingsActivity.class);
+            startSettingsActivity.putExtra("movie", movie);
+            startActivity(startSettingsActivity);
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    private Intent createShareMovieIntent() {
+        Intent shareIntent = new Intent(Intent.ACTION_SEND);
+        shareIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
+        shareIntent.setType("text/plain");
+        shareIntent.putExtra(Intent.EXTRA_TEXT, movie.getTitle() + " " +
+
+                "http://www.youtube.com/watch?v=" + mVideo.getKey());
+        return shareIntent;
     }
 
     public void displayDetails(String overview, String releaseDate, String title, String postal, Long rating ){
@@ -185,10 +300,10 @@ public class DetailsActivity extends AppCompatActivity {
         call.enqueue(new Callback<VideoResponse>() {
             @Override
             public void onResponse(Call<VideoResponse> call, Response<VideoResponse> response) {
-                VideoResponse videoResponse = response.body();
+                videoResponse = response.body();
                 passTrailerToAdapter(videoResponse);
 
-                Log.d(TAG, "Number of Reviews received: " + videoResponse.size());
+                Log.d(TAG, "Number of Trailers received: " + videoResponse.size());
             }
 
             @Override
@@ -211,6 +326,7 @@ public class DetailsActivity extends AppCompatActivity {
                 public void onItemClick(LinearListView parent, View view, int position, long id) {
                     Intent intent = new Intent(Intent.ACTION_VIEW);
                     intent.setData(Uri.parse("http://www.youtube.com/watch?v=" + videos.getKey()));
+                    startActivity(intent);
                 }
             });
         }

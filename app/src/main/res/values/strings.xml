@@ -6,4 +6,12 @@
     <string name="details">Details</string>
     <string name="trailers">Trailers</string>
     <string name="reviews">Reviews</string>
+
+    <string name="action_favorite">Favorite</string>
+    <string name="action_settings">Favorite</string>
+    <string name="action_share">Share</string>
+    <string name="pref_add_favorite_label">Add movie to Favorite</string>
+    <string name="pref_add_favorite_key" translatable="false">add_to_favorite</string>
+    <string name="pref_show_true">movie added</string>
+    <string name="pref_show_false">movie not added</string>
 </resources>

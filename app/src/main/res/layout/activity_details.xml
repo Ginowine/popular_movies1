@@ -6,7 +6,8 @@ android:id="@+id/detail_layout"
 android:visibility="invisible"
 android:layout_width="match_parent"
 android:layout_height="match_parent"
-tools:context="challenge.github.alc.com.popularmoveapp2.DetailsActivity">
+tools:context="challenge.github.alc.com.popularmoveapp2.DetailsActivity"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
 <LinearLayout
     android:orientation="vertical"
@@ -199,6 +200,16 @@ tools:context="challenge.github.alc.com.popularmoveapp2.DetailsActivity">
 
     </LinearLayout>
 
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_thumb_up_white_24dp"
+        android:layout_marginBottom="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_alignParentBottom="true"
+        android:layout_gravity="bottom|right"
+        app:fabSize="normal" />
 </LinearLayout>
 
 </ScrollView>

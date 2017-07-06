@@ -2,6 +2,7 @@ package challenge.github.alc.com.popularmoveapp2.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -73,8 +74,19 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieAdapter
             @Override
             public void onClick(View view) {
                 Context context = holder.itemView.getContext();
+                Bundle bundle = new Bundle();
+                bundle.putInt(Movie.MOVIE_ID, movies.getId());
+                bundle.putString(Movie.MOVIE_TITLE, movies.getOriginalTitle());
+                bundle.putString(Movie.MOVIE_OVERVIEW, movies.getOverview());
+                bundle.putString(Movie.POSTER_URL, movies.getPosterPath());
+                bundle.putString(Movie.MOVIE_RELEASE_DATE, movies.getReleaseDate());
+                //bundle.putDouble(Movie.MOVIE_RATING, movies.getRating());
+                //bundle.putDouble(Movie.MOVIE_RATING, movies.getRating());
+                bundle.putBoolean(Movie.MOVIE_FAVOURITE, movies.isFavourite());
+
                 Intent intent = new Intent(context, DetailsActivity.class);
-                intent.putExtra("movie", movies);
+                intent.putExtra(Movie.BUNDLE, bundle);
+                //intent.putExtra("movie", movies);
                 context.startActivity(intent);
             }
         });

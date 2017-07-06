@@ -6,12 +6,20 @@
     <string name="details">Details</string>
     <string name="trailers">Trailers</string>
     <string name="reviews">Reviews</string>
+    <string name="overview">Overview</string>
 
-    <string name="action_favorite">Favorite</string>
+    <string name="action_favorite">Favorites</string>
     <string name="action_settings">Favorite</string>
     <string name="action_share">Share</string>
     <string name="pref_add_favorite_label">Add movie to Favorite</string>
     <string name="pref_add_favorite_key" translatable="false">add_to_favorite</string>
     <string name="pref_show_true">movie added</string>
     <string name="pref_show_false">movie not added</string>
+
+    <string name="action_sort_by_top_rated_text">Sort by Ratings</string>
+    <string name="sorting_by_popularity">Sorting by Popularity&#8230;</string>
+
+    <string name="action_sort_by_popularity_text">Sort by Popularity</string>
+    <string name="title_activity_favourites">Favourite Movies</string>
+    <string name="movie_poster_content_description"> Movie poster for %1$s</string>
 </resources>

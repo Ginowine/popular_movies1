@@ -1,28 +1,64 @@
 <?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    tools:context="challenge.github.alc.com.popularmoveapp2.DetailsActivity">
 
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-xmlns:tools="http://schemas.android.com/tools"
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/detail_app_bar_layout"
+        android:layout_width="match_parent"
+        android:layout_height="256dp"
+        android:fitsSystemWindows="true"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+
+        <android.support.design.widget.CollapsingToolbarLayout
+            android:id="@+id/detail_collapsing_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fitsSystemWindows="true"
+            app:contentScrim="?attr/colorPrimary"
+            app:expandedTitleMarginEnd="64dp"
+            app:expandedTitleMarginStart="48dp"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed">
+
+            <ImageView
+                android:id="@+id/detail_image"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:adjustViewBounds="true"
+                android:scaleType="centerCrop"
+                app:layout_collapseMode="parallax"
+                app:srcCompat="@drawable/no_image" />
+
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/detail_toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                app:layout_collapseMode="pin"
+                app:layout_scrollFlags="scroll|enterAlways" />
+
+        </android.support.design.widget.CollapsingToolbarLayout>
+
+    </android.support.design.widget.AppBarLayout>
+
+<android.support.v4.widget.NestedScrollView
 android:id="@+id/detail_layout"
 android:visibility="invisible"
 android:layout_width="match_parent"
 android:layout_height="match_parent"
-tools:context="challenge.github.alc.com.popularmoveapp2.DetailsActivity"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
 <LinearLayout
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="match_parent">
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/grid_item_movie_height">
-
-        <ImageView
-            android:id="@+id/detail_image"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:scaleType="centerCrop" />
+        android:layout_height="match_parent">
 
         <TextView
             android:id="@+id/movie_title"
@@ -41,6 +77,14 @@ tools:context="challenge.github.alc.com.popularmoveapp2.DetailsActivity"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="10dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:text="@string/overview"
+            android:layout_marginBottom="10dp"
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/movie_overview"
@@ -197,7 +241,6 @@ tools:context="challenge.github.alc.com.popularmoveapp2.DetailsActivity"
             android:layout_width="42dp"
             android:layout_gravity="center"
             android:visibility="invisible" />
-
     </LinearLayout>
 
     <android.support.design.widget.FloatingActionButton
@@ -212,4 +255,5 @@ tools:context="challenge.github.alc.com.popularmoveapp2.DetailsActivity"
         app:fabSize="normal" />
 </LinearLayout>
 
-</ScrollView>
+</android.support.v4.widget.NestedScrollView>
+</android.support.design.widget.CoordinatorLayout>

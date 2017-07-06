@@ -7,4 +7,5 @@
     <color name="light_blue">#448AFF</color>
     <color name="textcolor">#727272</color>
     <dimen name="app_bar_height">256dp</dimen>
+    <color name="textviewColor">#BBB</color>
 </resources>

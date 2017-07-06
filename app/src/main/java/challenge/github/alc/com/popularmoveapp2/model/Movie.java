@@ -10,6 +10,15 @@ import com.google.gson.annotations.SerializedName;
  */
 public class Movie implements Parcelable{
 
+    public static final String POSTER_URL = "POSTER_URL";
+    public static final String MOVIE_TITLE = "MOVIE_TITLE";
+    public static final String MOVIE_RELEASE_DATE = "MOVIE_RELEASE_DATE";
+    public static final String MOVIE_RATING = "MOVIE_RATINGS";
+    public static final String MOVIE_OVERVIEW = "MOVIE_OVERVIEW";
+    public static final String MOVIE_FAVOURITE = "MOVIE_FAVOURITE";
+    public static final String BUNDLE = "movie";
+    public static final String MOVIE_ID = "id";
+
     @SerializedName("poster_path")
     private String posterPath;
     @SerializedName("overview")
@@ -34,12 +43,14 @@ public class Movie implements Parcelable{
     private Double voteAverage;
     @SerializedName("genre")
     private String genre;
-    private Long rating;
+    private Double rating;
     private long movie_id;
+    private boolean favourite;
+    private int check;
 
     public Movie(String posterPath,  String overview, String releaseDate, int id,
                  String originalTitle, String originalLanguage, String title, String backdropPath, Double popularity,
-                 Integer voteCount, Double voteAverage, String genre, Long rating, long movieId) {
+                 Integer voteCount, Double voteAverage, String genre, Double rating, long movieId) {
         this.posterPath = posterPath;
         this.overview = overview;
         this.releaseDate = releaseDate;
@@ -73,7 +84,7 @@ public class Movie implements Parcelable{
         this.voteCount = parcel.readInt();
         this.voteAverage = parcel.readDouble();
         this.genre = parcel.readString();
-        this.rating = parcel.readLong();
+        this.rating = parcel.readDouble();
         this.movie_id = parcel.readLong();
 
 
@@ -95,6 +106,20 @@ public class Movie implements Parcelable{
         parcel.writeString(genre);
         parcel.writeString(String.valueOf(rating));
         parcel.writeString(String.valueOf(movie_id));
+    }
+
+    public boolean isFavourite() {
+        return favourite;
+    }
+
+    public void setFavourite(boolean favourite) {
+        this.favourite = favourite;
+        if (favourite){
+            check = 1;
+        }
+        else {
+            check = 0;
+        }
     }
 
     @Override
@@ -199,11 +224,11 @@ public class Movie implements Parcelable{
         this.genre = genre;
     }
 
-    public Long getRating() {
+    public Double getRating() {
         return rating;
     }
 
-    public void setRating(Long rating) {
+    public void setRating(Double rating) {
         this.rating = rating;
     }
 

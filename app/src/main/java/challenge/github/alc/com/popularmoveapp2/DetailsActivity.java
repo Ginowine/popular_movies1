@@ -10,11 +10,13 @@ import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.MenuItemCompat;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.preference.PreferenceManager;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.ShareActionProvider;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -74,7 +76,7 @@ public class DetailsActivity extends AppCompatActivity {
     private LinearListView mTrailersView;
     private LinearListView mReviewsView;
 
-    private ScrollView mDetailLayout;
+    private NestedScrollView mDetailLayout;
 
 
     private String mOverview;
@@ -88,6 +90,7 @@ public class DetailsActivity extends AppCompatActivity {
     private ShareActionProvider mShareActionProvider;
     private VideoResponse videoResponse;
     private FloatingActionButton fab;
+    private boolean check;
 
     //List<Videos> mVideo;
 
@@ -97,17 +100,17 @@ public class DetailsActivity extends AppCompatActivity {
 
     Videos mVideo = new Videos();
     FavoritesFunctionalities favoritesService;
+    Bundle bundle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_details);
 
-        //Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        //setSupportActionBar(toolbar);
-        context = getApplicationContext();
-
+        Toolbar toolbar = (Toolbar) findViewById(R.id.detail_toolbar);
+        setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        context = getApplicationContext();
         //cab = (CollapsingToolbarLayout) findViewById(R.id.toolbar_layout);
         //cab.setTitleEnabled(false);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
@@ -121,34 +124,78 @@ public class DetailsActivity extends AppCompatActivity {
 
         mReviewsCardview = (CardView) findViewById(R.id.detail_reviews_cardview);
         mTrailersCardview = (CardView) findViewById(R.id.detail_trailers_cardview);
-        mDetailLayout = (ScrollView) findViewById(R.id.detail_layout);
+        mDetailLayout = (NestedScrollView) findViewById(R.id.detail_layout);
 
         mTrailersView = (LinearListView) findViewById(R.id.detail_trailers);
         mReviewsView = (LinearListView) findViewById(R.id.detail_reviews);
         mLoadingIndicator = (ProgressBar) findViewById(R.id.loading_indicator);
 
-        initRetrofit = new InitRetrofit();
-        movie = getIntent().getParcelableExtra("movie");
+        CollapsingToolbarLayout collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.detail_collapsing_toolbar);
 
-        if (movie != null){
+        initRetrofit = new InitRetrofit();
+
+
+        if (getIntent().hasExtra(Movie.MOVIE_FAVOURITE)){
+            bundle = getIntent().getBundleExtra(Movie.MOVIE_FAVOURITE);
+        }
+        else {
+            bundle = getIntent().getBundleExtra(Movie.BUNDLE);
+        }
+
+        if (bundle != null){
             mDetailLayout.setVisibility(View.VISIBLE);
-            mOverview = movie.getOverview();
-            mReleaseDate = movie.getReleaseDate();
-            mTitle = movie.getTitle();
-            mBackDrop = movie.getBackdropPath();
-            mPostalPath = movie.getPosterPath();
-            mRating = movie.getRating();
-            mMovie_id = movie.getId();
+            if (bundle.containsKey(Movie.MOVIE_TITLE)){
+                mTitle = bundle.getString(Movie.MOVIE_TITLE);
+                getSupportActionBar().setTitle(mTitle);
+            }
+            if (bundle.containsKey(Movie.MOVIE_OVERVIEW)){
+                mOverview = bundle.getString(Movie.MOVIE_OVERVIEW);
+            }
+            if (bundle.containsKey(Movie.MOVIE_RATING)){
+                mRating = bundle.getLong(Movie.MOVIE_RATING);
+            }
+            if (bundle.containsKey(Movie.MOVIE_RELEASE_DATE)){
+                mReleaseDate = bundle.getString(Movie.MOVIE_RELEASE_DATE);
+            }
+            if (bundle.containsKey(Movie.POSTER_URL)){
+                mPostalPath = bundle.getString(Movie.POSTER_URL);
+            }
+            if (bundle.containsKey(Movie.MOVIE_ID)){
+                mMovie_id = bundle.getInt(Movie.MOVIE_ID);
+            }
+            if (bundle.containsKey(Movie.MOVIE_FAVOURITE)){
+                check = bundle.getBoolean(Movie.MOVIE_FAVOURITE);
+            }
+
+            getReviewsFromAPI(mMovie_id);
+            getTrailerFromAPI(mMovie_id);
 
             displayDetails(mOverview, mReleaseDate, mTitle, mPostalPath, mRating);
-        }else {
-            mDetailLayout.setVisibility(View.INVISIBLE);
         }
 
-        if (movie != null){
-            getReviewsFromAPI(movie.getId());
-            getTrailerFromAPI(movie.getId());
-        }
+
+
+        //movie = getIntent().getParcelableExtra("movie");
+//
+//        if (bundle != null){
+//            mDetailLayout.setVisibility(View.VISIBLE);
+//            mOverview = bundle.get(Movie.MOVIE_OVERVIEW)
+//            mReleaseDate = movie.getReleaseDate();
+//            mTitle = movie.getTitle();
+//            mBackDrop = movie.getBackdropPath();
+//            mPostalPath = movie.getPosterPath();
+//            mRating = movie.getRating();
+//            mMovie_id = movie.getId();
+//
+//            displayDetails(mOverview, mReleaseDate, mTitle, mPostalPath, mRating);
+//        }else {
+//            mDetailLayout.setVisibility(View.INVISIBLE);
+//        }
+//
+//        if (movie != null){
+//            getReviewsFromAPI(movie.getId());
+//            getTrailerFromAPI(movie.getId());
+//        }
 
         setupSharedPreferences();
         setupFloatingActionButton();
@@ -169,18 +216,13 @@ public class DetailsActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (favoritesService.isFavorite(movie)) {
-                    favoritesService.removeFromFavorites(movie);
+                if (favoritesService.isFavorite(bundle)) {
+                    favoritesService.removeFromFavorites(bundle);
                         Utility.showToast(getApplicationContext(), "Removed from Favourite!");
                     fab.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_thumb_up_white_24dp));
-                        //fab.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_thumb_up_white_24dp));
-
                 } else {
-                    favoritesService.addToFavorites(movie);
+                    favoritesService.addToFavorites(bundle);
                         Utility.showToast(getApplicationContext(), "Added to Favourite!");
-                        //fab.setImageResource(ContextCompat.getDrawable(context, R.drawable.ic_thumb_down_white_24dp));
-                        //fab.setImageDrawable(getResources().getDrawable(R.drawable.ic_thumb_down_white_24dp, getApplicationContext().getTheme()));
-                        //fab.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_thumb_down_white_24dp));
                         fab.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_thumb_down_white_24dp));
                 }
             }
@@ -195,26 +237,6 @@ public class DetailsActivity extends AppCompatActivity {
             inflater.inflate(R.menu.menu_detail, menu);
             final MenuItem action_favorite = menu.findItem(R.id.action_favorite);
             MenuItem action_share = menu.findItem(R.id.action_share);
-//
-//            new AsyncTask<Void, Void, Integer>(){
-//
-//                @Override
-//                protected Integer doInBackground(Void... voids) {
-//                    return Utility.isFavorited(context, movie.getId());
-//                }
-//
-//                @Override
-//                protected void onPostExecute(Integer isFavorited) {
-//                    action_favorite.setIcon(isFavorited == 1 ?
-//                            R.drawable.abc_btn_rating_star_on_mtrl_alpha :
-//                            R.drawable.abc_btn_rating_star_off_mtrl_alpha);
-//                }
-//
-//            }.execute();
-//            mShareActionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(action_share);
-//            if (videoResponse != null) {
-//                mShareActionProvider.setShareIntent(createShareMovieIntent());
-//            }
         }
         return true;
     }

@@ -17,22 +17,36 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".DetailsActivity"
-            android:launchMode="singleTop"/>
+        <activity
+            android:name=".DetailsActivity"
+            android:launchMode="singleTop"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:parentActivityName=".MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTINTY"
+                android:value=".MainActivity" />
+        </activity>>
 
         <provider
             android:name=".data.MovieContentProvider"
             android:authorities="challenge.github.alc.com.popularmoveapp2"
             android:exported="false" />
 
-        <activity android:name=".SettingsActivity"
+        <activity
+            android:name=".SettingsActivity"
             android:label="@string/action_settings"
-            android:parentActivityName=".DetailsActivity">
-
+            android:parentActivityName=".DetailsActivity"
+            android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTINTY"
-                android:value=".DetailsActivity"/>
-
+                android:value=".DetailsActivity" />
+        </activity>
+        <activity android:name=".FavouritesActivity"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:parentActivityName=".DetailsActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTINTY"
+                android:value=".DetailsActivity" />
         </activity>
     </application>
 

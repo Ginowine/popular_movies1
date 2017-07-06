@@ -3,6 +3,7 @@ package challenge.github.alc.com.popularmoveapp2.sync;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.os.Bundle;
 
 import challenge.github.alc.com.popularmoveapp2.data.MovieContract;
 import challenge.github.alc.com.popularmoveapp2.model.Movie;
@@ -18,31 +19,31 @@ public class FavoritesFunctionalities {
         this.context = context.getApplicationContext();
     }
 
-    public void addToFavorites(Movie movie) {
+    public void addToFavorites(Bundle bundle) {
         ContentValues contentValues = new ContentValues();
-        contentValues.put(MovieContract.Favorites.FAVORITE_COLUMN_MOVIE_ID, movie.getId());
-        contentValues.put(MovieContract.Favorites.FAVORITE_COLUMN_TITLE, movie.getTitle());
-        contentValues.put(MovieContract.Favorites.FAVORITE_COLUMN_IMAGE, movie.getBackdropPath());
-        contentValues.put(MovieContract.Favorites.FAVORITE_COLUMN_OVERVIEW, movie.getOverview());
-        contentValues.put(MovieContract.Favorites.FAVORITE_COLUMN_RATING, movie.getRating());
-        contentValues.put(MovieContract.Favorites.FAVORITE_COLUMN_DATE, movie.getReleaseDate());
+        contentValues.put(MovieContract.Favorites.FAVORITE_COLUMN_MOVIE_ID, bundle.getString(Movie.MOVIE_ID));
+        contentValues.put(MovieContract.Favorites.FAVORITE_COLUMN_TITLE, bundle.getString(Movie.MOVIE_TITLE));
+        contentValues.put(MovieContract.Favorites.FAVORITE_COLUMN_IMAGE, bundle.getString(Movie.POSTER_URL));
+        contentValues.put(MovieContract.Favorites.FAVORITE_COLUMN_OVERVIEW, bundle.getString(Movie.MOVIE_OVERVIEW));
+        contentValues.put(MovieContract.Favorites.FAVORITE_COLUMN_RATING, bundle.getString(Movie.MOVIE_RATING));
+        contentValues.put(MovieContract.Favorites.FAVORITE_COLUMN_DATE, bundle.getString(Movie.MOVIE_RATING));
         context.getContentResolver().insert(MovieContract.Favorites.CONTENT_URI, contentValues);
     }
 
-    public void removeFromFavorites(Movie movie) {
+    public void removeFromFavorites(Bundle bundle) {
         context.getContentResolver().delete(
                 MovieContract.Favorites.CONTENT_URI,
-                MovieContract.Favorites.FAVORITE_COLUMN_MOVIE_ID + " = " + movie.getId(),
+                MovieContract.Favorites.FAVORITE_COLUMN_MOVIE_ID + " = " + bundle.getString(Movie.MOVIE_ID),
                 null
         );
     }
 
-    public boolean isFavorite(Movie movie) {
+    public boolean isFavorite(Bundle bundle) {
         boolean favorite = false;
         Cursor cursor = context.getContentResolver().query(
                 MovieContract.Favorites.CONTENT_URI,
                 null,
-                MovieContract.Favorites.FAVORITE_COLUMN_MOVIE_ID + " = " + movie.getId(),
+                MovieContract.Favorites.FAVORITE_COLUMN_MOVIE_ID + " = " + bundle.getString(Movie.MOVIE_ID),
                 null,
                 null
         );

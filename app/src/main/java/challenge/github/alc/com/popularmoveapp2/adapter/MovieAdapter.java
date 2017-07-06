@@ -8,6 +8,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
@@ -22,7 +24,7 @@ import challenge.github.alc.com.popularmoveapp2.model.Movie;
  */
 public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieAdapterViewHolder>{
 
-    public static final String IMAGE_URL_BASE_PATH="http://image.tmdb.org/t/p/w342//";
+    public static final String IMAGE_URL_BASE_PATH = "http://image.tmdb.org/t/p/w342//";
     public List<Movie> movieList;
     private int rowLayout;
     private Context context;
@@ -31,7 +33,6 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieAdapter
         this.movieList = movies;
         this.rowLayout = rowLayout;
         this.context = context;
-
     }
 
     public MovieAdapter(){
@@ -41,15 +42,24 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieAdapter
 
     //A view holder inner class where we get reference to the views in the layout using their ID
     public static class MovieAdapterViewHolder extends RecyclerView.ViewHolder{
-        ImageView backdropImage;
+
+        private final LinearLayout full_layout;
+        protected LinearLayout movieHolder;
+        protected LinearLayout movieTitleHolder;
+        protected ImageView imageView;
+        protected TextView titleView;
+        //ImageView backdropImage;
 
         public MovieAdapterViewHolder(View view){
             super(view);
 
-            backdropImage = (ImageView) view.findViewById(R.id.backdrop_image);
+            imageView = (ImageView) view.findViewById(R.id.thumbnail);
+            this.full_layout = (LinearLayout) view.findViewById(R.id.movie_layout);
+            this.movieHolder = (LinearLayout) view.findViewById(R.id.movieHolder);
+            this.movieTitleHolder = (LinearLayout) view.findViewById(R.id.movieTitleHolder);
+            this.titleView = (TextView) view.findViewById(R.id.title);
 
         }
-
     }
 
     @Override
@@ -68,7 +78,10 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieAdapter
                 .load(image_url)
                 .placeholder(android.R.drawable.sym_def_app_icon)
                 .error(android.R.drawable.sym_def_app_icon)
-                .into(holder.backdropImage);
+                .into(holder.imageView);
+
+        holder.titleView.setText(movies.getTitle());
+        holder.titleView.setContentDescription(movies.getTitle());
 
         holder.itemView.setOnClickListener(new View.OnClickListener(){
             @Override

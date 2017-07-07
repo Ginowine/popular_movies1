@@ -12,7 +12,10 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.ProgressBar;
 
+import java.util.List;
+
 import challenge.github.alc.com.popularmoveapp2.adapter.MovieAdapter;
+import challenge.github.alc.com.popularmoveapp2.model.Movie;
 import challenge.github.alc.com.popularmoveapp2.model.MovieResponse;
 import challenge.github.alc.com.popularmoveapp2.networkUtill.ApiCallService;
 import challenge.github.alc.com.popularmoveapp2.networkUtill.InitRetrofit;
@@ -34,6 +37,7 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView recyclerView = null;
     public ProgressBar mProgressBar;
     private LinearLayoutManager mStaggeredLayoutManager;
+    public List<Movie> movieList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,8 +52,8 @@ public class MainActivity extends AppCompatActivity {
         retrofitGetDataFromApi(RATING);
     }
 
-    private void sendDataToAdapter(MovieResponse movieResponse){
-        recyclerView.setAdapter(new MovieAdapter(movieResponse.getResults(), R.layout.gridview_layout, getApplicationContext()));
+    private void sendDataToAdapter(List<Movie> movies){
+        recyclerView.setAdapter(new MovieAdapter(movies, R.layout.gridview_layout, getApplicationContext()));
     }
 
     private void retrofitGetDataFromApi(String sortOrder){
@@ -61,7 +65,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<MovieResponse> call, Response<MovieResponse> response) {
                 MovieResponse movieResponse = response.body();
-                sendDataToAdapter(movieResponse);
+                movieList = movieResponse.getResults();
+                sendDataToAdapter(movieList);
 
                 Log.d(TAG, "Number of movies received: " + movieResponse.size());
             }
@@ -76,6 +81,9 @@ public class MainActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_main, menu);
+
+//        MenuItem action_sort_by_popularity = menu.findItem(R.id.action_sort_by_popularity);
+//        MenuItem action_sort_by_rating = menu.findItem(R.id.action_sort_by_rating);
         return true;
     }
 
@@ -88,12 +96,19 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
                 break;
             case R.id.action_sort_by_popularity:
-                retrofitGetDataFromApi(RATING);
+                clearView();
+                retrofitGetDataFromApi(POPULAR);
                 break;
             case R.id.action_sort_by_rating:
-                retrofitGetDataFromApi(POPULAR);
+                clearView();
+                retrofitGetDataFromApi(RATING);
                 break;
         }
         return true;
+    }
+
+    private void clearView() {
+        movieList.clear();
+        new MovieAdapter().notifyDataSetChanged();
     }
 }

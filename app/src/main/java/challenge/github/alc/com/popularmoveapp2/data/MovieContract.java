@@ -16,7 +16,7 @@ public class MovieContract {
     public static final String PATH_MOVIE = "movie";
     public static final String PATH_FAVORITES = "favorites";
 
-    public static final class MovieEntry implements BaseColumns{
+    public static final class MovieEntry implements BaseColumns {
 
         public static final Uri CONTENT_URI =
                 BASE_CONTENT_URI.buildUpon().appendPath(PATH_MOVIE).build();
@@ -45,7 +45,7 @@ public class MovieContract {
     public static final class Favorites implements BaseColumns {
         public static final Uri CONTENT_URI = BASE_CONTENT_URI.buildUpon().appendPath(PATH_FAVORITES).build();
 
-//
+        //
 //                MovieEntry.CONTENT_URI.buildUpon()
 //                .appendPath(PATH_FAVORITES)
 //                .build();
@@ -54,8 +54,8 @@ public class MovieContract {
                         + "/" + PATH_FAVORITES;
 
         public static final String TABLE_NAME = "favorites";
-        public static  final String _ID = "id";
-        public  static  final  String FAVORITE_COLUMN_MOVIE_ID_KEY = "movie_key";
+        public static final String _ID = "id";
+        public static final String FAVORITE_COLUMN_MOVIE_ID_KEY = "movie_key";
 
         public static final String FAVORITE_COLUMN_MOVIE_ID = "movie_id";
         public static final String FAVORITE_COLUMN_TITLE = "title";
@@ -64,8 +64,10 @@ public class MovieContract {
         public static final String FAVORITE_COLUMN_RATING = "rating";
         public static final String FAVORITE_COLUMN_DATE = "date";
 
-        private Favorites() {
-        }
+        //method to build the Uris of each item
+        public static Uri buildFavouritesUri(long id) {
+            return ContentUris.withAppendedId(CONTENT_URI, id);
 
+        }
     }
 }

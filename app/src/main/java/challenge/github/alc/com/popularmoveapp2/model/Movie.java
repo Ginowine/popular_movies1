@@ -43,14 +43,14 @@ public class Movie implements Parcelable{
     private Double voteAverage;
     @SerializedName("genre")
     private String genre;
-    private long rating;
+    private double rating;
     private long movie_id;
     private boolean favourite;
     private int check;
 
     public Movie(String posterPath,  String overview, String releaseDate, int id,
                  String originalTitle, String originalLanguage, String title, String backdropPath, Double popularity,
-                 Integer voteCount, Double voteAverage, String genre, long rating, long movieId) {
+                 Integer voteCount, Double voteAverage, String genre, double rating, long movieId) {
         this.posterPath = posterPath;
         this.overview = overview;
         this.releaseDate = releaseDate;
@@ -84,7 +84,7 @@ public class Movie implements Parcelable{
         this.voteCount = parcel.readInt();
         this.voteAverage = parcel.readDouble();
         this.genre = parcel.readString();
-        this.rating = parcel.readLong();
+        this.rating = parcel.readDouble();
         this.movie_id = parcel.readLong();
 
 
@@ -224,11 +224,11 @@ public class Movie implements Parcelable{
         this.genre = genre;
     }
 
-    public long getRating() {
+    public double getRating() {
         return rating;
     }
 
-    public void setRating(long rating) {
+    public void setRating(Double rating) {
         this.rating = rating;
     }
 

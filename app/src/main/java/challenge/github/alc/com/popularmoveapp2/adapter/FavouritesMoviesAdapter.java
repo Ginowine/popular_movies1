@@ -111,7 +111,7 @@ public class FavouritesMoviesAdapter extends RecyclerView.Adapter<FavouritesMovi
 
         //set the movie's rating
         favouriteMovie.setRating(cursor
-                .getLong(cursor.getColumnIndex(MovieContract.Favorites.FAVORITE_COLUMN_RATING)));
+                .getDouble(cursor.getColumnIndex(MovieContract.Favorites.FAVORITE_COLUMN_RATING)));
 
         //set the id
         favouriteMovie.setId(cursor

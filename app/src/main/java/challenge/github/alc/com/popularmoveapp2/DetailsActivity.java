@@ -83,7 +83,7 @@ public class DetailsActivity extends AppCompatActivity {
     private String mReleaseDate;
     private String mTitle;
     private String mPostalPath;
-    private Long mRating;
+    private double mRating;
     private String mBackDrop;
     private int mMovie_id;
     private Context context;
@@ -152,7 +152,7 @@ public class DetailsActivity extends AppCompatActivity {
                 mOverview = bundle.getString(Movie.MOVIE_OVERVIEW);
             }
             if (bundle.containsKey(Movie.MOVIE_RATING)){
-                mRating = bundle.getLong(Movie.MOVIE_RATING);
+                mRating = bundle.getDouble(Movie.MOVIE_RATING);
             }
             if (bundle.containsKey(Movie.MOVIE_RELEASE_DATE)){
                 mReleaseDate = bundle.getString(Movie.MOVIE_RELEASE_DATE);
@@ -264,7 +264,7 @@ public class DetailsActivity extends AppCompatActivity {
         return shareIntent;
     }
 
-    public void displayDetails(String overview, String releaseDate, String title, String postal, Long rating ){
+    public void displayDetails(String overview, String releaseDate, String title, String postal, double rating ){
 
         this.overview.setText(overview);
         this.movie_title.setText(title);

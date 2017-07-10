@@ -21,11 +21,12 @@ public class FavoritesFunctionalities {
 
     public void addToFavorites(Bundle bundle) {
         ContentValues contentValues = new ContentValues();
-        contentValues.put(MovieContract.Favorites.FAVORITE_COLUMN_MOVIE_ID, bundle.getString(Movie.MOVIE_ID));
+        //contentValues.put(MovieContract.Favorites._ID, bundle.getInt(Movie.MOVIE_ID));
+        contentValues.put(MovieContract.Favorites.FAVORITE_COLUMN_MOVIE_ID, bundle.getInt(Movie.MOVIE_ID));
         contentValues.put(MovieContract.Favorites.FAVORITE_COLUMN_TITLE, bundle.getString(Movie.MOVIE_TITLE));
         contentValues.put(MovieContract.Favorites.FAVORITE_COLUMN_IMAGE, bundle.getString(Movie.POSTER_URL));
         contentValues.put(MovieContract.Favorites.FAVORITE_COLUMN_OVERVIEW, bundle.getString(Movie.MOVIE_OVERVIEW));
-        contentValues.put(MovieContract.Favorites.FAVORITE_COLUMN_RATING, bundle.getString(Movie.MOVIE_RATING));
+        contentValues.put(MovieContract.Favorites.FAVORITE_COLUMN_RATING, bundle.getDouble(Movie.MOVIE_RATING));
         contentValues.put(MovieContract.Favorites.FAVORITE_COLUMN_DATE, bundle.getString(Movie.MOVIE_RELEASE_DATE));
         context.getContentResolver().insert(MovieContract.Favorites.CONTENT_URI, contentValues);
     }

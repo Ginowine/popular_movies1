@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Popular Move App2</string>
+    <string name="app_name">Popular Movie App</string>
     <string name="overvi">Overview</string>
     <string name="release_date">Release Date</string>
     <string name="rating">Rating</string>

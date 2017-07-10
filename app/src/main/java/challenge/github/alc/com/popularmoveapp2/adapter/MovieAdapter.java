@@ -93,8 +93,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieAdapter
                 bundle.putString(Movie.MOVIE_OVERVIEW, movies.getOverview());
                 bundle.putString(Movie.POSTER_URL, movies.getPosterPath());
                 bundle.putString(Movie.MOVIE_RELEASE_DATE, movies.getReleaseDate());
-                //bundle.putDouble(Movie.MOVIE_RATING, movies.getRating());
-                //bundle.putDouble(Movie.MOVIE_RATING, movies.getRating());
+                bundle.putLong(Movie.MOVIE_RATING, movies.getRating());
                 bundle.putBoolean(Movie.MOVIE_FAVOURITE, movies.isFavourite());
 
                 Intent intent = new Intent(context, DetailsActivity.class);

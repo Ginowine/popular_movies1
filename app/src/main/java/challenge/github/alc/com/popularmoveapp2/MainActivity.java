@@ -59,7 +59,7 @@ public class MainActivity extends AppCompatActivity {
     private void retrofitGetDataFromApi(String sortOrder){
         InitRetrofit initRetrofit = new InitRetrofit();
         ApiCallService apiCalls1 = initRetrofit.buildRetrofit();
-        Call<MovieResponse> call = apiCalls1.getMovies(API_KEY, sortOrder);
+        Call<MovieResponse> call = apiCalls1.getMovies(sortOrder, API_KEY);
 
         call.enqueue(new Callback<MovieResponse>() {
             @Override

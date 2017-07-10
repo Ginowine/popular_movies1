@@ -25,6 +25,8 @@ public class FavouritesMoviesAdapter extends RecyclerView.Adapter<FavouritesMovi
     private Context context;
     private ItemClickListener clickListener;
 
+    public static final String IMAGE_URL_BASE_PATH="http://image.tmdb.org/t/p/w342//";
+
     public interface ItemClickListener{
         void onItemClick(int position);
     }
@@ -55,9 +57,10 @@ public class FavouritesMoviesAdapter extends RecyclerView.Adapter<FavouritesMovi
         movieTitle.setText(movie.getOriginalTitle());
         movieRating.setText(String.valueOf(movie.getRating()));
 
+        String image_url = IMAGE_URL_BASE_PATH + movie.getPosterPath();
         // load the movie poster into the imageView
         Picasso.with(context)
-                .load(movie.getPosterPath()) //get the low resolution image
+                .load(image_url) //get the low resolution image
                 .placeholder(R.drawable.loading)
                 .error(R.drawable.no_image)
                 .into(moviePoster);
@@ -108,7 +111,7 @@ public class FavouritesMoviesAdapter extends RecyclerView.Adapter<FavouritesMovi
 
         //set the movie's rating
         favouriteMovie.setRating(cursor
-                .getDouble(cursor.getColumnIndex(MovieContract.Favorites.FAVORITE_COLUMN_RATING)));
+                .getLong(cursor.getColumnIndex(MovieContract.Favorites.FAVORITE_COLUMN_RATING)));
 
         //set the id
         favouriteMovie.setId(cursor

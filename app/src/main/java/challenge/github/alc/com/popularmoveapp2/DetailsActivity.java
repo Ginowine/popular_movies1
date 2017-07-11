@@ -83,8 +83,7 @@ public class DetailsActivity extends AppCompatActivity {
     private String mReleaseDate;
     private String mTitle;
     private String mPostalPath;
-    private double mRating;
-    private String mBackDrop;
+    private String mRating;
     private int mMovie_id;
     private Context context;
     private ShareActionProvider mShareActionProvider;
@@ -100,7 +99,7 @@ public class DetailsActivity extends AppCompatActivity {
 
     Videos mVideo = new Videos();
     FavoritesFunctionalities favoritesService;
-    Bundle bundle;
+    private Bundle bundle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -152,7 +151,7 @@ public class DetailsActivity extends AppCompatActivity {
                 mOverview = bundle.getString(Movie.MOVIE_OVERVIEW);
             }
             if (bundle.containsKey(Movie.MOVIE_RATING)){
-                mRating = bundle.getDouble(Movie.MOVIE_RATING);
+                mRating = String.valueOf(bundle.getDouble(Movie.MOVIE_RATING));
             }
             if (bundle.containsKey(Movie.MOVIE_RELEASE_DATE)){
                 mReleaseDate = bundle.getString(Movie.MOVIE_RELEASE_DATE);
@@ -172,30 +171,6 @@ public class DetailsActivity extends AppCompatActivity {
 
             displayDetails(mOverview, mReleaseDate, mTitle, mPostalPath, mRating);
         }
-
-
-
-        //movie = getIntent().getParcelableExtra("movie");
-//
-//        if (bundle != null){
-//            mDetailLayout.setVisibility(View.VISIBLE);
-//            mOverview = bundle.get(Movie.MOVIE_OVERVIEW)
-//            mReleaseDate = movie.getReleaseDate();
-//            mTitle = movie.getTitle();
-//            mBackDrop = movie.getBackdropPath();
-//            mPostalPath = movie.getPosterPath();
-//            mRating = movie.getRating();
-//            mMovie_id = movie.getId();
-//
-//            displayDetails(mOverview, mReleaseDate, mTitle, mPostalPath, mRating);
-//        }else {
-//            mDetailLayout.setVisibility(View.INVISIBLE);
-//        }
-//
-//        if (movie != null){
-//            getReviewsFromAPI(movie.getId());
-//            getTrailerFromAPI(movie.getId());
-//        }
 
         setupSharedPreferences();
         setupFloatingActionButton();
@@ -235,8 +210,6 @@ public class DetailsActivity extends AppCompatActivity {
         MenuInflater inflater = getMenuInflater();
         if (movie != null){
             inflater.inflate(R.menu.menu_detail, menu);
-            final MenuItem action_favorite = menu.findItem(R.id.action_favorite);
-            MenuItem action_share = menu.findItem(R.id.action_share);
         }
         return true;
     }
@@ -245,13 +218,16 @@ public class DetailsActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
 
         int id = item.getItemId();
-        if (id == R.id.action_favorite){
-            Intent startSettingsActivity = new Intent(this, SettingsActivity.class);
-            startSettingsActivity.putExtra("movie", movie);
-            startActivity(startSettingsActivity);
-            return true;
+
+        switch (id) {
+            case R.id.action_share:
+                createShareMovieIntent();
+                break;
+            case android.R.id.home:
+                onBackPressed();
+                break;
         }
-        return super.onOptionsItemSelected(item);
+        return true;
     }
 
     private Intent createShareMovieIntent() {
@@ -259,12 +235,11 @@ public class DetailsActivity extends AppCompatActivity {
         shareIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
         shareIntent.setType("text/plain");
         shareIntent.putExtra(Intent.EXTRA_TEXT, movie.getTitle() + " " +
-
                 "http://www.youtube.com/watch?v=" + mVideo.getKey());
         return shareIntent;
     }
 
-    public void displayDetails(String overview, String releaseDate, String title, String postal, double rating ){
+    public void displayDetails(String overview, String releaseDate, String title, String postal, String rating ){
 
         this.overview.setText(overview);
         this.movie_title.setText(title);

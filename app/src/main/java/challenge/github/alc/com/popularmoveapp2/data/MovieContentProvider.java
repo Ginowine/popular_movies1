@@ -1,6 +1,7 @@
 package challenge.github.alc.com.popularmoveapp2.data;
 
 import android.content.ContentProvider;
+import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.UriMatcher;
@@ -18,6 +19,7 @@ public class MovieContentProvider extends ContentProvider {
 
     public static final int MOVIES = 100;
     public static final int FAVORITE = 200;
+    private static final int ONE_FAVOURITE = 201;
 
     public static UriMatcher buildUriMatcher(){
         final UriMatcher matcher = new UriMatcher(UriMatcher.NO_MATCH);
@@ -25,6 +27,8 @@ public class MovieContentProvider extends ContentProvider {
 
         matcher.addURI(authority, MovieContract.PATH_MOVIE, MOVIES);
         matcher.addURI(authority, MovieContract.PATH_FAVORITES,FAVORITE );
+        //matcher for one favourite in the database
+        matcher.addURI(authority, MovieContract.Favorites.TABLE_NAME + "/#", ONE_FAVOURITE );
 
         return matcher;
     }
@@ -92,10 +96,15 @@ public class MovieContentProvider extends ContentProvider {
         int moviesDeleted;
 
         switch (sUriMatcher.match(uri)){
-            case FAVORITE: {
+            case FAVORITE:
                 moviesDeleted = db.delete(MovieContract.Favorites.TABLE_NAME, s, strings);
                 break;
-            }
+
+            case ONE_FAVOURITE:
+                s = MovieContract.Favorites._ID + "=?";
+                strings = new String[]{String.valueOf(ContentUris.parseId(uri))};
+                moviesDeleted = db.delete(MovieContract.Favorites.TABLE_NAME, s,strings);
+                break;
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
         }

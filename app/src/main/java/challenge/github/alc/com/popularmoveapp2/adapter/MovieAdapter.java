@@ -105,8 +105,25 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieAdapter
 
     }
 
+    public List<Movie> getMoviesData() {
+        return movieList;
+    }
+
+
+
     @Override
     public int getItemCount() {
         return movieList.size();
+    }
+
+    /**
+     * Reset the Movie List, new search, for example
+     */
+    public void clearMovieList() {
+        if (null != movieList) {
+           movieList.clear();
+            notifyDataSetChanged();
+        }
+
     }
 }

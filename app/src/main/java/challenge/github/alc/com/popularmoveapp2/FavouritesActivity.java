@@ -69,7 +69,6 @@ public class FavouritesActivity extends AppCompatActivity implements LoaderManag
                 getSupportLoaderManager().restartLoader(LOADER_ID, null, FavouritesActivity.this);
                 favouriteMoviesAdapter.notifyDataSetChanged();
                 Log.e("DEL", "--> " + viewHolder.getAdapterPosition());
-
             }
         }).attachToRecyclerView(recyclerView);
     }

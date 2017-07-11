@@ -25,4 +25,5 @@ tools:context="challenge.github.alc.com.popularmoveapp2.MainActivity">
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 
+
 </LinearLayout>

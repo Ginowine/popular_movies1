@@ -129,31 +129,10 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-//    @Override
-//    public void onResume() {
-//        super.onResume();
-//
-//        if (bundle != null){
-//            //ArrayList<Result> result_Saved = savedInstanceState.getParcelableArrayList(MOVIES_KEY);
-//            movieList  = bundle.getParcelableArrayList(MOVIES_KEY);
-//            sendDataToAdapter(movieList);
-//        }
-//        else {
-//            this.retrofitGetDataFromApi(POPULAR);
-//            Log.i("MainActivity","Downloading data from cloud");
-//
-//        }
-//    }
-
-
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_main, menu);
-
-//        MenuItem action_sort_by_popularity = menu.findItem(R.id.action_sort_by_popularity);
-//        MenuItem action_sort_by_rating = menu.findItem(R.id.action_sort_by_rating);
         return true;
     }
 

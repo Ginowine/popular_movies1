@@ -120,8 +120,6 @@ public class FavouritesActivity extends AppCompatActivity implements LoaderManag
             public Cursor loadInBackground() {
                 // Will implement to load data
                 Cursor cursor;
-                // Query and load all task data in the background; sort by priority
-                // [Hint] use a try/catch block to catch any errors in loading data
 
                 try {
                     cursor = getContentResolver().query(MovieContract.Favorites.CONTENT_URI,

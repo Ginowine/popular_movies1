@@ -16,6 +16,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
     public String mSort = POPULAR;
     public String mSorting;
 
-    public static final String API_KEY = "PUT YOUR API KEY HERE";
+    public static final String API_KEY = "232c7933fb923517762fbaba80f80ba9";
     public static String BASE_URL = "https://api.themoviedb.org/3/";
 
     private static Retrofit retrofit = null;
@@ -71,14 +72,17 @@ public class MainActivity extends AppCompatActivity {
 
         if (isConnected()){
             retrofitGetDataFromApi(mSort);
+        }else {
+            Utility.showToast(getApplicationContext(), "Please turn internet on!");
         }
     }
 
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
-        this.movieList = savedInstanceState.getParcelableArrayList(MOVIES_KEY);
-        sendDataToAdapter(movieList);
         super.onRestoreInstanceState(savedInstanceState);
+        this.movieList = savedInstanceState.getParcelableArrayList(MOVIES_KEY);
+        this.mSorting = savedInstanceState.getString(BUNDLE_SORTING_KEY);
+        sendDataToAdapter(movieList);
     }
 
     //Checking for Connection so we can inflater the Layout and Handling the force Stop caused by no Internet Connection
@@ -122,7 +126,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        //List<Movie> movieList = this.nMovieAdapter.getMoviesData();
+        this.movieList = this.nMovieAdapter.getMoviesData();
         if (null != movieList) {
             outState.putParcelableArrayList(MOVIES_KEY, new ArrayList<Parcelable>(movieList));
             outState.putString(BUNDLE_SORTING_KEY, mSort);

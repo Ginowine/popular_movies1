@@ -40,6 +40,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieAdapter
     }
 
 
+
     //A view holder inner class where we get reference to the views in the layout using their ID
     public static class MovieAdapterViewHolder extends RecyclerView.ViewHolder{
 
@@ -94,7 +95,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieAdapter
                 bundle.putString(Movie.POSTER_URL, movies.getPosterPath());
                 bundle.putString(Movie.MOVIE_RELEASE_DATE, movies.getReleaseDate());
                 bundle.putDouble(Movie.MOVIE_RATING, movies.getRating());
-                bundle.putBoolean(Movie.MOVIE_FAVOURITE, movies.isFavourite());
+                //bundle.putBoolean(Movie.MOVIE_FAVOURITE, movies.isFavourite());
 
                 Intent intent = new Intent(context, DetailsActivity.class);
                 intent.putExtra(Movie.BUNDLE, bundle);

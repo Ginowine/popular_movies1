@@ -1,60 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/favourites_container"
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:card_view="http://schemas.android.com/apk/res-auto"
+android:id="@+id/placeCard"
+android:layout_width="match_parent"
+android:layout_height="wrap_content"
+card_view:cardCornerRadius="@dimen/card_corner_radius"
+card_view:cardElevation="@dimen/card_elevation">
+
+<LinearLayout
+    android:id="@+id/favorite_movie_layout"
     android:layout_width="match_parent"
-    android:layout_height="72dp"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+    android:layout_height="match_parent"
+    android:background="@color/detail_text"
+    android:orientation="vertical"
+    android:padding="5dp">
 
     <ImageView
         android:id="@+id/favourites_movie_poster"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/tv_margin"
-        android:scaleType="centerCrop"
-        android:adjustViewBounds="true"
-        android:contentDescription="@string/movie_poster_content_description"
-        app:srcCompat = "@drawable/no_image"
-        />
-
-    <TextView
-        android:id="@+id/favorites_movie_title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_toRightOf="@+id/favourites_movie_poster"
-        android:layout_toEndOf="@+id/favourites_movie_poster"
-        android:layout_marginTop="@dimen/tv_margin"
-        android:layout_marginLeft="@dimen/tv_margin"
-        android:layout_marginStart="@dimen/tv_margin"
-        android:textAppearance="?android:textAppearanceLarge"
-        android:maxLines="1"
-        android:ellipsize="end"
-        tools:text = "The Big Bang Theory"
-        />
-
-    <TextView
-        android:id="@+id/favourites_movie_ratings"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_toRightOf="@+id/favourites_movie_poster"
-        android:layout_toEndOf="@+id/favourites_movie_poster"
-        android:layout_below="@+id/favorites_movie_title"
-        android:layout_marginTop="@dimen/tv_margin"
-        android:layout_marginLeft="@dimen/tv_margin"
-        android:layout_marginStart="@dimen/tv_margin"
-        android:textAppearance="?android:textAppearanceMedium"
-        android:maxLines="1"
-        android:drawableStart="@drawable/ic_star_half_black_24dp"
-        android:drawableLeft="@drawable/ic_star_half_black_24dp"
-        android:ellipsize="end"
-        android:gravity="fill_vertical"
-        tools:text = "4.9"
-        />
-
-    <View
         android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_alignParentBottom="true"
-        android:background="@android:color/darker_gray"/>
+        android:layout_height="200dp"
+        android:scaleType="centerCrop"
+        android:transitionName="movie_poster" />
 
-</RelativeLayout>
+    <!-- Used for the ripple effect on touch -->
+    <LinearLayout
+        android:id="@+id/favorite_movieHolder"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="?android:selectableItemBackground"
+        android:orientation="horizontal" />
+
+    <LinearLayout
+        android:id="@+id/favorite_movieTitleHolder"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_gravity="bottom"
+        android:orientation="horizontal"
+        android:weightSum="4">
+
+        <TextView
+            android:id="@+id/favorites_movie_title"
+            style="@style/MovieItemText"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="3"
+            android:gravity="left"
+            android:paddingLeft="10dp"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textColor="@android:color/white"
+            android:textSize="15sp"
+            android:transitionName="movie_title" />
+
+    </LinearLayout>
+</LinearLayout>
+</android.support.v7.widget.CardView>

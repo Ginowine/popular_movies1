@@ -8,6 +8,7 @@ import android.support.v4.content.AsyncTaskLoader;
 import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -41,36 +42,13 @@ public class FavouritesActivity extends AppCompatActivity implements LoaderManag
         getSupportActionBar().setTitle("Favourite Movies");
         recyclerView = (RecyclerView) findViewById(R.id.favorites_recycler_view); //gert reference to the recycler view
         favouriteMoviesAdapter = new FavouritesMoviesAdapter(this); //instantiate the adadpter
-        linearLayoutManager = new LinearLayoutManager(this); //instantiate the layout manager
-        favouriteMoviesAdapter.setClickListener(clickListener);
+        linearLayoutManager = new GridLayoutManager(getApplicationContext(), 2); //instantiate the layout manager
+        //favouriteMoviesAdapter.setClickListener(clickListener);
         recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.setAdapter(favouriteMoviesAdapter);
 
         getSupportLoaderManager().initLoader(LOADER_ID, null, this);
 
-        //swipe to delete, implemented in OnSwiped()
-        new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
-            @Override
-            public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
-                return false;
-            }
-
-            @Override
-            public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
-                // Build appropriate uri with String row id appended
-                String stringId = Integer.toString((int) viewHolder.itemView.getTag());
-                Uri uri = MovieContract.Favorites.CONTENT_URI;
-                uri = uri.buildUpon().appendPath(stringId).build();
-
-                // COMPLETED (2) Delete a single row of data using a ContentResolver
-                getContentResolver().delete(uri, null, null);
-
-                // COMPLETED (3) Restart the loader to re-query for all tasks after a deletion
-                getSupportLoaderManager().restartLoader(LOADER_ID, null, FavouritesActivity.this);
-                favouriteMoviesAdapter.notifyDataSetChanged();
-                Log.e("DEL", "--> " + viewHolder.getAdapterPosition());
-            }
-        }).attachToRecyclerView(recyclerView);
     }
 
     @Override
@@ -79,24 +57,7 @@ public class FavouritesActivity extends AppCompatActivity implements LoaderManag
         getSupportLoaderManager().restartLoader(LOADER_ID, null, this);
     }
 
-    // called when any of the favourite movies in the recycler view is clicked
-    FavouritesMoviesAdapter.ItemClickListener clickListener = new FavouritesMoviesAdapter.ItemClickListener() {
-        @Override
-        public void onItemClick(int position) {
-            Movie item = favouriteMoviesAdapter.getFavouriteMoviesDataFromCursor(cursor, position);
-            Bundle bundle = new Bundle();
-            bundle.putInt(Movie.MOVIE_ID, item.getId());
-            bundle.putString(Movie.MOVIE_TITLE, item.getOriginalTitle());
-            bundle.putString(Movie.MOVIE_OVERVIEW, item.getOverview());
-            bundle.putString(Movie.POSTER_URL, item.getPosterPath());
-            bundle.putString(Movie.MOVIE_RELEASE_DATE, item.getReleaseDate());
-            bundle.putDouble(Movie.MOVIE_RATING, item.getRating());
-            bundle.putBoolean(Movie.MOVIE_FAVOURITE, true);
-            Intent intent = new Intent(FavouritesActivity.this, DetailsActivity.class);
-            intent.putExtra(Movie.MOVIE_FAVOURITE, bundle);
-            startActivity(intent);
-        }
-    };
+
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
@@ -142,6 +103,7 @@ public class FavouritesActivity extends AppCompatActivity implements LoaderManag
             // deliverResult sends the result of the load, a Cursor, to the registered listener
             public void deliverResult(Cursor data) {
                 cursor = data;
+                //favouriteMoviesAdapter.getFavouriteMoviesDataFromCursor(cursor);
                 super.deliverResult(data);
             }
         };

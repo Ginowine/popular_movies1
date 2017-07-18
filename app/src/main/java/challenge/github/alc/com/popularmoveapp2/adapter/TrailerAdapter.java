@@ -1,6 +1,8 @@
 package challenge.github.alc.com.popularmoveapp2.adapter;
 
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -82,6 +84,18 @@ public class TrailerAdapter extends BaseAdapter {
                 .placeholder(android.R.drawable.sym_def_app_icon)
                 .error(android.R.drawable.sym_def_app_icon)
                 .into(viewHolder.imageView);
+
+        viewHolder.imageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Context context = view.getContext();
+                Uri imageVideoLink = Uri.parse("http://www.youtube.com/watch?v=" + videos.getKey());
+                Intent intent = new Intent(Intent.ACTION_VIEW, imageVideoLink);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                //intent.setData(Uri.parse("http://www.youtube.com/watch?v=" + videos.getKey()));
+                context.startActivity(intent);
+            }
+        });
 
         return view;
     }

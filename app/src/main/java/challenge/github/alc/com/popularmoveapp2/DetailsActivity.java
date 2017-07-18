@@ -47,6 +47,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import com.linearlistview.LinearListView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class DetailsActivity extends AppCompatActivity {
@@ -83,7 +84,7 @@ public class DetailsActivity extends AppCompatActivity {
     private String mReleaseDate;
     private String mTitle;
     private String mPostalPath;
-    private String mRating;
+    private double mRating;
     private int mMovie_id;
     private Context context;
     private ShareActionProvider mShareActionProvider;
@@ -94,6 +95,7 @@ public class DetailsActivity extends AppCompatActivity {
     //List<Videos> mVideo;
 
     private ProgressBar mLoadingIndicator;
+    public List<Videos> videoList = new ArrayList<Videos>();
 
     //private Trailer trailer;
 
@@ -154,7 +156,7 @@ public class DetailsActivity extends AppCompatActivity {
                 mOverview = bundle.getString(Movie.MOVIE_OVERVIEW);
             }
             if (bundle.containsKey(Movie.MOVIE_RATING)){
-                mRating = String.valueOf(bundle.getDouble(Movie.MOVIE_RATING));
+                mRating = bundle.getDouble(Movie.MOVIE_RATING);
             }
             if (bundle.containsKey(Movie.MOVIE_RELEASE_DATE)){
                 mReleaseDate = bundle.getString(Movie.MOVIE_RELEASE_DATE);
@@ -242,7 +244,7 @@ public class DetailsActivity extends AppCompatActivity {
         return shareIntent;
     }
 
-    public void displayDetails(String overview, String releaseDate, String title, String postal, String rating ){
+    public void displayDetails(String overview, String releaseDate, String title, String postal, double rating ){
 
         this.overview.setText(overview);
         this.movie_title.setText(title);
@@ -293,7 +295,7 @@ public class DetailsActivity extends AppCompatActivity {
         }
     }
 
-    private void getTrailerFromAPI(long movieId){
+    private void getTrailerFromAPI(int movieId){
         ApiCallService apiCallService = initRetrofit.buildRetrofit();
 
         Call<VideoResponse> call = apiCallService.getMovieTrailer(String.valueOf(movieId), TRAILERS, API_KEY );
@@ -317,18 +319,20 @@ public class DetailsActivity extends AppCompatActivity {
         if (response != null){
             mTrailersCardview.setVisibility(View.VISIBLE);
             mTrailerAdapter = new TrailerAdapter(getApplicationContext(),response.getResults());
+            //videoList = response.getResults();
             mTrailersView.setAdapter(mTrailerAdapter);
 
-            final Videos videos = new Videos();
+            //final Videos videos = videoList.get()
 
-            mTrailersView.setOnItemClickListener(new LinearListView.OnItemClickListener(){
-                @Override
-                public void onItemClick(LinearListView parent, View view, int position, long id) {
-                    Intent intent = new Intent(Intent.ACTION_VIEW);
-                    intent.setData(Uri.parse("http://www.youtube.com/watch?v=" + videos.getKey()));
-                    startActivity(intent);
-                }
-            });
+//            mTrailersView.setOnItemClickListener(new LinearListView.OnItemClickListener(){
+//                @Override
+//                public void onItemClick(LinearListView parent, View view, int position, long id) {
+//                    Uri imageVideoLink
+//                    Intent intent = new Intent(Intent.ACTION_VIEW);
+//                    intent.setData(Uri.parse("http://www.youtube.com/watch?v=" + videoList));
+//                    startActivity(intent);
+//                }
+//            });
         }
     }
 

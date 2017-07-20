@@ -45,7 +45,6 @@ public class TrailerAdapter extends BaseAdapter {
 
     @Override
     public long getItemId(int i) {
-        //return Long.parseLong(mVideo.get(i).getId());
         return i;
     }
 
@@ -92,7 +91,6 @@ public class TrailerAdapter extends BaseAdapter {
                 Uri imageVideoLink = Uri.parse("http://www.youtube.com/watch?v=" + videos.getKey());
                 Intent intent = new Intent(Intent.ACTION_VIEW, imageVideoLink);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                //intent.setData(Uri.parse("http://www.youtube.com/watch?v=" + videos.getKey()));
                 context.startActivity(intent);
             }
         });

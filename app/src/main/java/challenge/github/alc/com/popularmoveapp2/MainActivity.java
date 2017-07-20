@@ -51,6 +51,8 @@ public class MainActivity extends AppCompatActivity {
     public Bundle bundle;
     public MovieAdapter nMovieAdapter;
     private static final String BUNDLE_SORTING_KEY = "currentSorting";
+    int mAdapterPosition;
+    private Parcelable recyclerViewState;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,11 +65,14 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(mStaggeredLayoutManager);
         mProgressBar = (ProgressBar) findViewById(R.id.progressBar);
 
-        if (savedInstanceState != null){
+        if (savedInstanceState != null && savedInstanceState.containsKey("scrollposition")){
             this.movieList = savedInstanceState.getParcelableArrayList(MOVIES_KEY);
             mSorting = savedInstanceState.getString(BUNDLE_SORTING_KEY);
             this.mSort = mSorting;
             sendDataToAdapter(movieList);
+            mAdapterPosition = savedInstanceState.getInt("scrollposition");
+
+            recyclerView.scrollToPosition(mAdapterPosition);
         }
 
         if (isConnected()){
@@ -82,7 +87,10 @@ public class MainActivity extends AppCompatActivity {
         super.onRestoreInstanceState(savedInstanceState);
         this.movieList = savedInstanceState.getParcelableArrayList(MOVIES_KEY);
         this.mSorting = savedInstanceState.getString(BUNDLE_SORTING_KEY);
+        this.mSort = mSorting;
         sendDataToAdapter(movieList);
+        mAdapterPosition = savedInstanceState.getInt("scrollposition");
+        recyclerView.scrollToPosition(mAdapterPosition);
     }
 
     //Checking for Connection so we can inflater the Layout and Handling the force Stop caused by no Internet Connection
@@ -95,8 +103,9 @@ public class MainActivity extends AppCompatActivity {
     private void sendDataToAdapter(List<Movie> movies){
         nMovieAdapter = new MovieAdapter(movies, R.layout.gridview_layout, getApplicationContext());
         recyclerView.setAdapter(nMovieAdapter);
+        //mAdapterPosition = nMovieAdapter.getPosition();
         //recyclerView.setAdapter(new MovieAdapter(movies, R.layout.gridview_layout, getApplicationContext()));
-        this.mProgressBar.setVisibility(View.GONE);
+        //this.mProgressBar.setVisibility(View.GONE);
     }
 
     private void retrofitGetDataFromApi(String sortOrder){
@@ -128,8 +137,12 @@ public class MainActivity extends AppCompatActivity {
         super.onSaveInstanceState(outState);
         this.movieList = this.nMovieAdapter.getMoviesData();
         if (null != movieList) {
+            mAdapterPosition = nMovieAdapter.getPosition();
             outState.putParcelableArrayList(MOVIES_KEY, new ArrayList<Parcelable>(movieList));
+            outState.putInt("adapterposition", mAdapterPosition);
             outState.putString(BUNDLE_SORTING_KEY, mSort);
+            outState.putInt("scrollposition", mStaggeredLayoutManager.findFirstVisibleItemPosition());
+            
         }
     }
 

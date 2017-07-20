@@ -28,6 +28,16 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieAdapter
     public List<Movie> movieList;
     private int rowLayout;
     private Context context;
+    private int previousPosition = 0;
+
+
+    public int getPosition() {
+        return previousPosition;
+    }
+
+    public void setPosition(int position) {
+        this.previousPosition = position;
+    }
 
     public MovieAdapter(List<Movie> movies, int rowLayout, Context context){
         this.movieList = movies;
@@ -60,6 +70,9 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieAdapter
             this.movieTitleHolder = (LinearLayout) view.findViewById(R.id.movieTitleHolder);
             this.titleView = (TextView) view.findViewById(R.id.title);
 
+            view.setTag(getAdapterPosition());
+
+
         }
     }
 
@@ -67,6 +80,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieAdapter
     public MovieAdapterViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext()).inflate(rowLayout, parent, false);
         return new MovieAdapterViewHolder(itemView);
+
     }
 
     @Override
@@ -104,6 +118,8 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieAdapter
             }
         });
 
+        previousPosition = holder.getAdapterPosition();
+        setPosition(previousPosition);
     }
 
     public List<Movie> getMoviesData() {

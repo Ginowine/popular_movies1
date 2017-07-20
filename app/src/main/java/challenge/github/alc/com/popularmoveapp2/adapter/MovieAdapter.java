@@ -83,6 +83,11 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieAdapter
 
     }
 
+    public void swapList(List<Movie> movies) {
+        movieList = movies;
+        notifyDataSetChanged();
+    }
+
     @Override
     public void onBindViewHolder(final MovieAdapterViewHolder holder, int position) {
        // String image_url = IMAGE_URL_BASE_PATH + movieList.get(position).getPosterPath();
@@ -108,7 +113,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieAdapter
                 bundle.putString(Movie.MOVIE_OVERVIEW, movies.getOverview());
                 bundle.putString(Movie.POSTER_URL, movies.getPosterPath());
                 bundle.putString(Movie.MOVIE_RELEASE_DATE, movies.getReleaseDate());
-                bundle.putDouble(Movie.MOVIE_RATING, movies.getRating());
+                bundle.putDouble(Movie.MOVIE_VOTE_AVERAGE, movies.getVoteAverage());
                 //bundle.putBoolean(Movie.MOVIE_FAVOURITE, movies.isFavourite());
 
                 Intent intent = new Intent(context, DetailsActivity.class);

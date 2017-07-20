@@ -61,7 +61,7 @@ public class MovieContract {
         public static final String FAVORITE_COLUMN_TITLE = "title";
         public static final String FAVORITE_COLUMN_IMAGE = "image";
         public static final String FAVORITE_COLUMN_OVERVIEW = "overview";
-        public static final String FAVORITE_COLUMN_RATING = "rating";
+        public static final String FAVORITE_COLUMN_VOTE_AVERAGE = "vote_average";
         public static final String FAVORITE_COLUMN_DATE = "date";
 
         //method to build the Uris of each item

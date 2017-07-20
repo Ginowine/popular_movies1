@@ -2,6 +2,7 @@ package challenge.github.alc.com.popularmoveapp2.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.util.StringBuilderPrinter;
 
 import com.google.gson.annotations.SerializedName;
 
@@ -13,7 +14,7 @@ public class Movie implements Parcelable{
     public static final String POSTER_URL = "POSTER_URL";
     public static final String MOVIE_TITLE = "MOVIE_TITLE";
     public static final String MOVIE_RELEASE_DATE = "MOVIE_RELEASE_DATE";
-    public static final String MOVIE_RATING = "MOVIE_RATINGS";
+    public static final String MOVIE_VOTE_AVERAGE = "MOVIE_VOTE_AVERAGE";
     public static final String MOVIE_OVERVIEW = "MOVIE_OVERVIEW";
     public static final String MOVIE_FAVOURITE = "MOVIE_FAVOURITE";
     public static final String BUNDLE = "movie";
@@ -43,14 +44,14 @@ public class Movie implements Parcelable{
     private Double voteAverage;
     @SerializedName("genre")
     private String genre;
-    private double rating;
+    private Double rating;
     private long movie_id;
     private boolean favourite;
     private int check;
 
     public Movie(String posterPath,  String overview, String releaseDate, int id,
                  String originalTitle, String originalLanguage, String title, String backdropPath, Double popularity,
-                 Integer voteCount, Double voteAverage, String genre, double rating, long movieId) {
+                 Integer voteCount, Double voteAverage, String genre, Double rating, long movieId) {
         this.posterPath = posterPath;
         this.overview = overview;
         this.releaseDate = releaseDate;
@@ -104,7 +105,7 @@ public class Movie implements Parcelable{
         parcel.writeInt(voteCount);
         parcel.writeDouble(voteAverage);
         parcel.writeString(genre);
-        parcel.writeString(String.valueOf(rating));
+        //parcel.writeDouble(String.valueOf(rating));
         parcel.writeString(String.valueOf(movie_id));
     }
 
@@ -224,7 +225,7 @@ public class Movie implements Parcelable{
         this.genre = genre;
     }
 
-    public double getRating() {
+    public Double getRating() {
         return rating;
     }
 

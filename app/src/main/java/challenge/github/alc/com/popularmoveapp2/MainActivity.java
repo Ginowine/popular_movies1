@@ -2,9 +2,13 @@ package challenge.github.alc.com.popularmoveapp2;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Parcelable;
+import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
@@ -15,6 +19,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
@@ -53,6 +58,8 @@ public class MainActivity extends AppCompatActivity {
     private static final String BUNDLE_SORTING_KEY = "currentSorting";
     int mAdapterPosition;
     private Parcelable recyclerViewState;
+    private LinearLayout layout;
+    SharedPreferences.Editor editor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,6 +72,11 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(mStaggeredLayoutManager);
         mProgressBar = (ProgressBar) findViewById(R.id.progressBar);
 
+        layout = (LinearLayout) findViewById(R.id.main_content);
+
+        SharedPreferences prefs = getSharedPreferences("sort", MODE_PRIVATE);
+        editor = prefs.edit();
+
         if (savedInstanceState != null && savedInstanceState.containsKey("scrollposition")){
             this.movieList = savedInstanceState.getParcelableArrayList(MOVIES_KEY);
             mSorting = savedInstanceState.getString(BUNDLE_SORTING_KEY);
@@ -72,13 +84,15 @@ public class MainActivity extends AppCompatActivity {
             sendDataToAdapter(movieList);
             mAdapterPosition = savedInstanceState.getInt("scrollposition");
 
-            recyclerView.scrollToPosition(mAdapterPosition);
+            recyclerView.smoothScrollToPosition(mAdapterPosition);
+            //recyclerView.scrollToPosition(mAdapterPosition);
         }
-
         if (isConnected()){
             retrofitGetDataFromApi(mSort);
         }else {
-            Utility.showToast(getApplicationContext(), "Please turn internet on!");
+            Snackbar snackbar = Snackbar.make(layout, "Please turn Internet on", Snackbar.LENGTH_LONG);
+            snackbar.show();
+            //Utility.showToast(getApplicationContext(), "Please turn internet on!");
         }
     }
 
@@ -103,6 +117,7 @@ public class MainActivity extends AppCompatActivity {
     private void sendDataToAdapter(List<Movie> movies){
         nMovieAdapter = new MovieAdapter(movies, R.layout.gridview_layout, getApplicationContext());
         recyclerView.setAdapter(nMovieAdapter);
+        nMovieAdapter.swapList(movies);
         //mAdapterPosition = nMovieAdapter.getPosition();
         //recyclerView.setAdapter(new MovieAdapter(movies, R.layout.gridview_layout, getApplicationContext()));
         //this.mProgressBar.setVisibility(View.GONE);
@@ -137,12 +152,12 @@ public class MainActivity extends AppCompatActivity {
         super.onSaveInstanceState(outState);
         this.movieList = this.nMovieAdapter.getMoviesData();
         if (null != movieList) {
-            mAdapterPosition = nMovieAdapter.getPosition();
-            outState.putParcelableArrayList(MOVIES_KEY, new ArrayList<Parcelable>(movieList));
+            //mAdapterPosition = nMovieAdapter.getPosition();
+            outState.putParcelableArrayList(MOVIES_KEY, (ArrayList<? extends Parcelable>) movieList);
             outState.putInt("adapterposition", mAdapterPosition);
             outState.putString(BUNDLE_SORTING_KEY, mSort);
             outState.putInt("scrollposition", mStaggeredLayoutManager.findFirstVisibleItemPosition());
-            
+
         }
     }
 
@@ -155,26 +170,51 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        ActionBar actionBar = getSupportActionBar();
         int id = item.getItemId();
         switch (id){
             case R.id.action_favorites:
                 Intent intent = new Intent(getApplicationContext(), FavouritesActivity.class);
                 startActivity(intent);
-                break;
+                return true;
             case R.id.action_sort_by_popularity:
-                mSort = POPULAR;
+                editor.putString("sort_by", "popular");
+                editor.apply();
+                item.setChecked(true);
+
+                if (actionBar != null) {
+                    actionBar.setTitle("Popular Movies");
+                }
+                //mSort = POPULAR;
                 nMovieAdapter.clearMovieList();
-                //clearView();
-                retrofitGetDataFromApi(mSort);
-                break;
+                retrofitGetDataFromApi(POPULAR);
+                return true;
             case R.id.action_sort_by_rating:
-                mSort = RATING;
+                //mSort = RATING;
+                editor.putString("sort_by", "top_rated");
+                editor.apply();
+
+                item.setChecked(true);
+
+                if (actionBar != null) {
+                    actionBar.setTitle("Top Rated");
+                }
                 nMovieAdapter.clearMovieList();
                 //clearView();
-                retrofitGetDataFromApi(mSort);
-                break;
+                retrofitGetDataFromApi(RATING);
+               return true;
+
+            default:
+                return super.onOptionsItemSelected(item);
         }
-        return true;
+    }
+
+    @NonNull
+    private String getPreference() {
+        SharedPreferences shared = getSharedPreferences("sort", MODE_PRIVATE);
+        String pref = (shared.getString("sort_by", ""));
+        Log.v("Main", "value is: " + pref);
+        return pref;
     }
 
     private void clearView() {

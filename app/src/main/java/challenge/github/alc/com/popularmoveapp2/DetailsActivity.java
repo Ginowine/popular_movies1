@@ -7,7 +7,9 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.provider.MediaStore;
 import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.NestedScrollView;
@@ -96,6 +98,7 @@ public class DetailsActivity extends AppCompatActivity {
 
     private ProgressBar mLoadingIndicator;
     public List<Videos> videoList = new ArrayList<Videos>();
+    private CoordinatorLayout coordinatorLayout;
 
     //private Trailer trailer;
 
@@ -131,6 +134,9 @@ public class DetailsActivity extends AppCompatActivity {
         mReviewsView = (LinearListView) findViewById(R.id.detail_reviews);
         mLoadingIndicator = (ProgressBar) findViewById(R.id.loading_indicator);
 
+        coordinatorLayout = (CoordinatorLayout) findViewById(R.id
+                .coordinatorLayout);
+
         CollapsingToolbarLayout collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.detail_collapsing_toolbar);
 
         initRetrofit = new InitRetrofit();
@@ -155,8 +161,8 @@ public class DetailsActivity extends AppCompatActivity {
             if (bundle.containsKey(Movie.MOVIE_OVERVIEW)){
                 mOverview = bundle.getString(Movie.MOVIE_OVERVIEW);
             }
-            if (bundle.containsKey(Movie.MOVIE_RATING)){
-                mRating = bundle.getDouble(Movie.MOVIE_RATING);
+            if (bundle.containsKey(Movie.MOVIE_VOTE_AVERAGE)){
+                mRating = bundle.getDouble(Movie.MOVIE_VOTE_AVERAGE);
             }
             if (bundle.containsKey(Movie.MOVIE_RELEASE_DATE)){
                 mReleaseDate = bundle.getString(Movie.MOVIE_RELEASE_DATE);
@@ -198,11 +204,15 @@ public class DetailsActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if (favoritesService.isFavorite(bundle)) {
                     favoritesService.removeFromFavorites(bundle);
-                        Utility.showToast(getApplicationContext(), "Removed from Favourite!");
+                    Snackbar snackbar = Snackbar.make(coordinatorLayout, "Romoved from Favourites", Snackbar.LENGTH_LONG);
+                    snackbar.show();
+                        //Utility.showToast(getApplicationContext(), "Removed from Favourite!");
                     fab.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_thumb_up_white_24dp));
                 } else {
                     favoritesService.addToFavorites(bundle);
-                        Utility.showToast(getApplicationContext(), "Added to Favourite!");
+                    Snackbar snackbar = Snackbar.make(coordinatorLayout, "Added to Favourites", Snackbar.LENGTH_LONG);
+                    snackbar.show();
+                        //Utility.showToast(getApplicationContext(), "Added to Favourite!");
                         fab.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_thumb_down_white_24dp));
                 }
             }
@@ -244,7 +254,7 @@ public class DetailsActivity extends AppCompatActivity {
         return shareIntent;
     }
 
-    public void displayDetails(String overview, String releaseDate, String title, String postal, double rating ){
+    public void displayDetails(String overview, String releaseDate, String title, String postal, Double rating ){
 
         this.overview.setText(overview);
         this.movie_title.setText(title);

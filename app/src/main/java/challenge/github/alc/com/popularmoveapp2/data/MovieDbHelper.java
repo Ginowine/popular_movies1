@@ -38,7 +38,7 @@ public class MovieDbHelper extends SQLiteOpenHelper {
                 MovieContract.Favorites.FAVORITE_COLUMN_IMAGE + " TEXT NOT NULL, " +
                 MovieContract.Favorites.FAVORITE_COLUMN_OVERVIEW      + " TEXT NOT NULL, " +
                 MovieContract.Favorites.FAVORITE_COLUMN_TITLE         + " TEXT NOT NULL, " +
-                MovieContract.Favorites.FAVORITE_COLUMN_RATING  + " TEXT NOT NULL, " +
+                MovieContract.Favorites.FAVORITE_COLUMN_VOTE_AVERAGE  + " TEXT NOT NULL, " +
                 MovieContract.Favorites.FAVORITE_COLUMN_DATE  + " TEXT NOT NULL);";
 
         sqLiteDatabase.execSQL(SQL_CREATE_FAVORITE_TABLE);

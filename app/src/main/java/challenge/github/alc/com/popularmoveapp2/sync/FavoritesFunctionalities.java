@@ -26,7 +26,7 @@ public class FavoritesFunctionalities {
         contentValues.put(MovieContract.Favorites.FAVORITE_COLUMN_TITLE, bundle.getString(Movie.MOVIE_TITLE));
         contentValues.put(MovieContract.Favorites.FAVORITE_COLUMN_IMAGE, bundle.getString(Movie.POSTER_URL));
         contentValues.put(MovieContract.Favorites.FAVORITE_COLUMN_OVERVIEW, bundle.getString(Movie.MOVIE_OVERVIEW));
-        contentValues.put(MovieContract.Favorites.FAVORITE_COLUMN_RATING, bundle.getDouble(Movie.MOVIE_RATING));
+        contentValues.put(MovieContract.Favorites.FAVORITE_COLUMN_VOTE_AVERAGE, bundle.getDouble(Movie.MOVIE_VOTE_AVERAGE));
         contentValues.put(MovieContract.Favorites.FAVORITE_COLUMN_DATE, bundle.getString(Movie.MOVIE_RELEASE_DATE));
         context.getContentResolver().insert(MovieContract.Favorites.CONTENT_URI, contentValues);
     }

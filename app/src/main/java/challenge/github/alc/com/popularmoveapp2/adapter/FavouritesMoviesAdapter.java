@@ -73,7 +73,7 @@ public class FavouritesMoviesAdapter extends RecyclerView.Adapter<FavouritesMovi
                 bundle.putString(Movie.MOVIE_OVERVIEW, movie.getOverview());
                 bundle.putString(Movie.POSTER_URL, movie.getPosterPath());
                 bundle.putString(Movie.MOVIE_RELEASE_DATE, movie.getReleaseDate());
-                bundle.putDouble(Movie.MOVIE_RATING, movie.getRating());
+                bundle.putDouble(Movie.MOVIE_VOTE_AVERAGE, movie.getVoteAverage());
                 bundle.putBoolean(Movie.MOVIE_FAVOURITE, movie.isFavourite());
 
                 Intent intent = new Intent(context, DetailsActivity.class);
@@ -129,8 +129,8 @@ public class FavouritesMoviesAdapter extends RecyclerView.Adapter<FavouritesMovi
                 .getString(cursor.getColumnIndex(MovieContract.Favorites.FAVORITE_COLUMN_OVERVIEW)));
 
         //set the movie's rating
-        favouriteMovie.setRating(cursor
-                .getDouble(cursor.getColumnIndex(MovieContract.Favorites.FAVORITE_COLUMN_RATING)));
+        favouriteMovie.setVoteAverage(cursor
+                .getDouble(cursor.getColumnIndex(MovieContract.Favorites.FAVORITE_COLUMN_VOTE_AVERAGE)));
 
         //set the id
         favouriteMovie.setId(cursor

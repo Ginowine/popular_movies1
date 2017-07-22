@@ -79,33 +79,36 @@ public class MainActivity extends AppCompatActivity {
 
         if (savedInstanceState != null && savedInstanceState.containsKey("scrollposition")){
             this.movieList = savedInstanceState.getParcelableArrayList(MOVIES_KEY);
+            Log.d ("mMovieList", movieList.size() + "");
             mSorting = savedInstanceState.getString(BUNDLE_SORTING_KEY);
             this.mSort = mSorting;
             sendDataToAdapter(movieList);
-            mAdapterPosition = savedInstanceState.getInt("scrollposition");
-
+            mAdapterPosition = savedInstanceState.getInt("adapterposition");
+            //mStaggeredLayoutManager.scrollToPositionWithOffset(mAdapterPosition, 0);
             recyclerView.smoothScrollToPosition(mAdapterPosition);
             //recyclerView.scrollToPosition(mAdapterPosition);
-        }
-        if (isConnected()){
-            retrofitGetDataFromApi(mSort);
         }else {
-            Snackbar snackbar = Snackbar.make(layout, "Please turn Internet on", Snackbar.LENGTH_LONG);
-            snackbar.show();
-            //Utility.showToast(getApplicationContext(), "Please turn internet on!");
+            retrofitGetDataFromApi(mSort);
         }
+//        if (isConnected()){
+//            retrofitGetDataFromApi(mSort);
+//        }else {
+//            Snackbar snackbar = Snackbar.make(layout, "Please turn Internet on", Snackbar.LENGTH_LONG);
+//            snackbar.show();
+//            //Utility.showToast(getApplicationContext(), "Please turn internet on!");
+//        }
     }
 
-    @Override
-    protected void onRestoreInstanceState(Bundle savedInstanceState) {
-        super.onRestoreInstanceState(savedInstanceState);
-        this.movieList = savedInstanceState.getParcelableArrayList(MOVIES_KEY);
-        this.mSorting = savedInstanceState.getString(BUNDLE_SORTING_KEY);
-        this.mSort = mSorting;
-        sendDataToAdapter(movieList);
-        mAdapterPosition = savedInstanceState.getInt("scrollposition");
-        recyclerView.scrollToPosition(mAdapterPosition);
-    }
+//    @Override
+//    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+//        super.onRestoreInstanceState(savedInstanceState);
+//        this.movieList = savedInstanceState.getParcelableArrayList(MOVIES_KEY);
+//        this.mSorting = savedInstanceState.getString(BUNDLE_SORTING_KEY);
+//        this.mSort = mSorting;
+//        sendDataToAdapter(movieList);
+//        mAdapterPosition = savedInstanceState.getInt("scrollposition");
+//        recyclerView.scrollToPosition(mAdapterPosition);
+//    }
 
     //Checking for Connection so we can inflater the Layout and Handling the force Stop caused by no Internet Connection
     public boolean isConnected() {
@@ -136,7 +139,6 @@ public class MainActivity extends AppCompatActivity {
                 MovieResponse movieResponse = response.body();
                 movieList = movieResponse.getResults();
                 sendDataToAdapter(movieList);
-
                 Log.d(TAG, "Number of movies received: " + movieResponse.size());
             }
             @Override
@@ -152,12 +154,11 @@ public class MainActivity extends AppCompatActivity {
         super.onSaveInstanceState(outState);
         this.movieList = this.nMovieAdapter.getMoviesData();
         if (null != movieList) {
-            //mAdapterPosition = nMovieAdapter.getPosition();
+            mAdapterPosition = nMovieAdapter.getPosition();
             outState.putParcelableArrayList(MOVIES_KEY, (ArrayList<? extends Parcelable>) movieList);
             outState.putInt("adapterposition", mAdapterPosition);
             outState.putString(BUNDLE_SORTING_KEY, mSort);
-            outState.putInt("scrollposition", mStaggeredLayoutManager.findFirstVisibleItemPosition());
-
+            outState.putInt("scrollposition", mStaggeredLayoutManager.findFirstCompletelyVisibleItemPosition());
         }
     }
 

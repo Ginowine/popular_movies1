@@ -8,6 +8,7 @@ import android.content.UriMatcher;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 /**
@@ -19,7 +20,7 @@ public class MovieContentProvider extends ContentProvider {
 
     public static final int MOVIES = 100;
     public static final int FAVORITE = 200;
-    private static final int ONE_FAVOURITE = 201;
+    private static final int FAVOURITE_ID = 201;
 
     public static UriMatcher buildUriMatcher(){
         final UriMatcher matcher = new UriMatcher(UriMatcher.NO_MATCH);
@@ -28,7 +29,7 @@ public class MovieContentProvider extends ContentProvider {
         matcher.addURI(authority, MovieContract.PATH_MOVIE, MOVIES);
         matcher.addURI(authority, MovieContract.PATH_FAVORITES,FAVORITE );
         //matcher for one favourite in the database
-        matcher.addURI(authority, MovieContract.Favorites.TABLE_NAME + "/#", ONE_FAVOURITE );
+        matcher.addURI(authority, MovieContract.Favorites.TABLE_NAME + "/#", FAVOURITE_ID);
 
         return matcher;
     }
@@ -42,14 +43,34 @@ public class MovieContentProvider extends ContentProvider {
 
     @Nullable
     @Override
-    public Cursor query(Uri uri, String[] strings, String s, String[] strings1, String s1) {
+    public Cursor query(@NonNull Uri uri, @Nullable String[] projection, @Nullable String selection, @Nullable String[] selectionArgs, @Nullable String sortOrder) {
 
         Cursor cursor;
 
         switch (sUriMatcher.match(uri)){
             case FAVORITE:{
-                cursor = mMovieDbHelper.getReadableDatabase().query(MovieContract.Favorites.TABLE_NAME,
-                        strings, s, strings1, s1, null, null);
+                cursor = mMovieDbHelper.getReadableDatabase().query(
+                        MovieContract.Favorites.TABLE_NAME,
+                        projection,
+                        selection,
+                        selectionArgs,
+                        null,
+                        null,
+                        sortOrder);
+                break;
+            }
+            case FAVOURITE_ID:{
+                selection = MovieContract.Favorites._ID + "=?";
+                selectionArgs = new String[] {String.valueOf(ContentUris.parseId(uri))};
+                cursor = mMovieDbHelper.getReadableDatabase().query(
+                        MovieContract.Favorites.TABLE_NAME,
+                        projection,
+                        selection,
+                        selectionArgs,
+                        null,
+                        null,
+                        sortOrder);
+
                 break;
             }
             default:
@@ -100,7 +121,7 @@ public class MovieContentProvider extends ContentProvider {
                 moviesDeleted = db.delete(MovieContract.Favorites.TABLE_NAME, s, strings);
                 break;
 
-            case ONE_FAVOURITE:
+            case FAVOURITE_ID:
                 s = MovieContract.Favorites._ID + "=?";
                 strings = new String[]{String.valueOf(ContentUris.parseId(uri))};
                 moviesDeleted = db.delete(MovieContract.Favorites.TABLE_NAME, s,strings);

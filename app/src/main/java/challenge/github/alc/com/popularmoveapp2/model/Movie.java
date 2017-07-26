@@ -85,7 +85,7 @@ public class Movie implements Parcelable{
         this.voteCount = parcel.readInt();
         this.voteAverage = parcel.readDouble();
         this.genre = parcel.readString();
-        this.rating = parcel.readDouble();
+        //this.rating = parcel.readDouble();
         this.movie_id = parcel.readLong();
 
 
@@ -106,7 +106,8 @@ public class Movie implements Parcelable{
         parcel.writeDouble(voteAverage);
         parcel.writeString(genre);
         //parcel.writeDouble(String.valueOf(rating));
-        parcel.writeString(String.valueOf(movie_id));
+        parcel.writeLong(movie_id);
+        //parcel.writeString(String.valueOf(movie_id));
     }
 
     public boolean isFavourite() {

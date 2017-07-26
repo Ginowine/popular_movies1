@@ -144,9 +144,6 @@ public class DetailsActivity extends AppCompatActivity {
 
         if (getIntent().hasExtra(Movie.MOVIE_FAVOURITE)){
             bundle = getIntent().getBundleExtra(Movie.MOVIE_FAVOURITE);
-            mMovie_id = bundle.getInt(Movie.MOVIE_ID);
-            getReviewsFromAPI(mMovie_id);
-            getTrailerFromAPI(mMovie_id);
         }
         else {
             bundle = getIntent().getBundleExtra(Movie.BUNDLE);
@@ -178,7 +175,7 @@ public class DetailsActivity extends AppCompatActivity {
             }
 
             getReviewsFromAPI(mMovie_id);
-            getTrailerFromAPI(mMovie_id);
+            //getTrailerFromAPI(mMovie_id);
 
             displayDetails(mOverview, mReleaseDate, mTitle, mPostalPath, mRating);
         }

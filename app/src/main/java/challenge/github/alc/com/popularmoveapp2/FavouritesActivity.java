@@ -43,7 +43,6 @@ public class FavouritesActivity extends AppCompatActivity implements LoaderManag
         recyclerView = (RecyclerView) findViewById(R.id.favorites_recycler_view); //gert reference to the recycler view
         favouriteMoviesAdapter = new FavouritesMoviesAdapter(this); //instantiate the adadpter
         linearLayoutManager = new GridLayoutManager(getApplicationContext(), 2); //instantiate the layout manager
-        //favouriteMoviesAdapter.setClickListener(clickListener);
         recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.setAdapter(favouriteMoviesAdapter);
 

@@ -74,7 +74,7 @@ public class FavouritesMoviesAdapter extends RecyclerView.Adapter<FavouritesMovi
                 bundle.putString(Movie.POSTER_URL, movie.getPosterPath());
                 bundle.putString(Movie.MOVIE_RELEASE_DATE, movie.getReleaseDate());
                 bundle.putDouble(Movie.MOVIE_VOTE_AVERAGE, movie.getVoteAverage());
-                bundle.putBoolean(Movie.MOVIE_FAVOURITE, movie.isFavourite());
+                bundle.putBoolean(Movie.MOVIE_FAVOURITE, true);
 
                 Intent intent = new Intent(context, DetailsActivity.class);
                 intent.putExtra(Movie.MOVIE_FAVOURITE, bundle);

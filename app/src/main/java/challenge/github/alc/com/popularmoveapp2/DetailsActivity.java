@@ -175,7 +175,7 @@ public class DetailsActivity extends AppCompatActivity {
             }
 
             getReviewsFromAPI(mMovie_id);
-            //getTrailerFromAPI(mMovie_id);
+            getTrailerFromAPI(mMovie_id);
 
             displayDetails(mOverview, mReleaseDate, mTitle, mPostalPath, mRating);
         }
@@ -284,7 +284,7 @@ public class DetailsActivity extends AppCompatActivity {
                 //review = response.body();
                 passDataToAdapter(reviewResponse);
                 mLoadingIndicator.setVisibility(View.INVISIBLE);
-                Log.d(TAG, "Number of Reviews received: " + reviewResponse.size());
+               // Log.d(TAG, "Number of Reviews received: " + reviewResponse.size());
             }
 
             @Override
@@ -312,7 +312,7 @@ public class DetailsActivity extends AppCompatActivity {
                 videoResponse = response.body();
                 passTrailerToAdapter(videoResponse);
 
-                Log.d(TAG, "Number of Trailers received: " + videoResponse.size());
+                //Log.d(TAG, "Number of Trailers received: " + videoResponse.size());
             }
 
             @Override

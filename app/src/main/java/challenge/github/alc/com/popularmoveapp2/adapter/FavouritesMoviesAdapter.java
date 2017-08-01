@@ -134,7 +134,7 @@ public class FavouritesMoviesAdapter extends RecyclerView.Adapter<FavouritesMovi
 
         //set the id
         favouriteMovie.setId(cursor
-                .getInt(cursor.getColumnIndex(MovieContract.Favorites._ID)));
+                .getInt(cursor.getColumnIndex(MovieContract.Favorites.FAVORITE_COLUMN_MOVIE_ID)));
 
         return favouriteMovie;
     }

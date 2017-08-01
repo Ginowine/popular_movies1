@@ -34,7 +34,7 @@ public class FavoritesFunctionalities {
     public void removeFromFavorites(Bundle bundle) {
         context.getContentResolver().delete(
                 MovieContract.Favorites.CONTENT_URI,
-                MovieContract.Favorites.FAVORITE_COLUMN_MOVIE_ID + " = " + bundle.getString(Movie.MOVIE_ID),
+                MovieContract.Favorites.FAVORITE_COLUMN_MOVIE_ID + " = " + bundle.getInt(Movie.MOVIE_ID),
                 null
         );
     }
@@ -44,7 +44,7 @@ public class FavoritesFunctionalities {
         Cursor cursor = context.getContentResolver().query(
                 MovieContract.Favorites.CONTENT_URI,
                 null,
-                MovieContract.Favorites.FAVORITE_COLUMN_MOVIE_ID + " = " + bundle.getString(Movie.MOVIE_ID),
+                MovieContract.Favorites.FAVORITE_COLUMN_MOVIE_ID + " = " + bundle.getInt(Movie.MOVIE_ID),
                 null,
                 null
         );

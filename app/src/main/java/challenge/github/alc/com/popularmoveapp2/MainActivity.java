@@ -152,6 +152,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
+        nMovieAdapter = new MovieAdapter();
         this.movieList = this.nMovieAdapter.getMoviesData();
         if (null != movieList) {
             mAdapterPosition = nMovieAdapter.getPosition();

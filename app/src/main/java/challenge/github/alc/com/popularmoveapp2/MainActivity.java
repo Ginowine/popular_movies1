@@ -44,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
     public String mSort = POPULAR;
     public String mSorting;
 
-    public static final String API_KEY = "PUT YOUR API KEY HERE";
+    public static final String API_KEY = "232c7933fb923517762fbaba80f80ba9";
     public static String BASE_URL = "https://api.themoviedb.org/3/";
 
     private static Retrofit retrofit = null;
@@ -79,7 +79,7 @@ public class MainActivity extends AppCompatActivity {
 
         if (savedInstanceState != null && savedInstanceState.containsKey("scrollposition")){
             this.movieList = savedInstanceState.getParcelableArrayList(MOVIES_KEY);
-            Log.d ("mMovieList", movieList.size() + "");
+            //Log.d ("mMovieList", movieList.size() + "");
             mSorting = savedInstanceState.getString(BUNDLE_SORTING_KEY);
             this.mSort = mSorting;
             sendDataToAdapter(movieList);
@@ -152,9 +152,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        nMovieAdapter = new MovieAdapter();
-        this.movieList = this.nMovieAdapter.getMoviesData();
-        if (null != movieList) {
+        if (null != movieList && !movieList.isEmpty()) {
+            this.movieList = this.nMovieAdapter.getMoviesData();
             mAdapterPosition = nMovieAdapter.getPosition();
             outState.putParcelableArrayList(MOVIES_KEY, (ArrayList<? extends Parcelable>) movieList);
             outState.putInt("adapterposition", mAdapterPosition);
@@ -187,9 +186,10 @@ public class MainActivity extends AppCompatActivity {
                 if (actionBar != null) {
                     actionBar.setTitle("Popular Movies");
                 }
-                //mSort = POPULAR;
-                nMovieAdapter.clearMovieList();
-                retrofitGetDataFromApi(POPULAR);
+                if (null != movieList && !movieList.isEmpty()){
+                    nMovieAdapter.clearMovieList();
+                    retrofitGetDataFromApi(POPULAR);
+                }
                 return true;
             case R.id.action_sort_by_rating:
                 //mSort = RATING;
@@ -201,9 +201,11 @@ public class MainActivity extends AppCompatActivity {
                 if (actionBar != null) {
                     actionBar.setTitle("Top Rated");
                 }
-                nMovieAdapter.clearMovieList();
-                //clearView();
-                retrofitGetDataFromApi(RATING);
+
+                if (null != movieList && !movieList.isEmpty()){
+                    nMovieAdapter.clearMovieList();
+                    retrofitGetDataFromApi(RATING);
+                }
                return true;
 
             default:

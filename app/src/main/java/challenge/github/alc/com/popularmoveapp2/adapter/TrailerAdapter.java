@@ -30,7 +30,12 @@ public class TrailerAdapter extends BaseAdapter {
     public TrailerAdapter(Context context, List<Videos> video){
         mContext = context;
         mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        mVideo = video;
+        setVideosData(video);
+        //mVideo = video;
+    }
+
+    public TrailerAdapter(){
+
     }
 
     @Override
@@ -96,5 +101,28 @@ public class TrailerAdapter extends BaseAdapter {
         });
 
         return view;
+    }
+
+    /**
+     * Setter method for the Video List Object
+     *
+     * @param videoList the List containing Video Objects
+     */
+    public void setVideosData(List<Videos> videoList) {
+        if (null == mVideo) {
+            mVideo = videoList;
+        } else {
+            mVideo.addAll(videoList);
+        }
+        notifyDataSetChanged();
+    }
+
+    /**
+     * Getter method for the Video List Object
+     *
+     * @return the Video List
+     */
+    public List<Videos> getVideosData() {
+        return mVideo;
     }
 }

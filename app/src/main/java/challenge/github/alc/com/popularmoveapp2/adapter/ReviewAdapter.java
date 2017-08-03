@@ -26,7 +26,8 @@ public class ReviewAdapter extends BaseAdapter {
     public ReviewAdapter(Context context, List<Review> review) {
         mContext = context;
         mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        mReview = review;
+        setReviewsData(review);
+        //mReview = review;
 
         //mReview = new Review();
     }
@@ -81,5 +82,28 @@ public class ReviewAdapter extends BaseAdapter {
         viewHolder.contentView.setText(Html.fromHtml(review.getContent()));
 
         return view;
+    }
+
+    /**
+     * Setter method for the Review List Object
+     *
+     * @param reviewList the List containing Review Objects
+     */
+    public void setReviewsData(List<Review> reviewList) {
+        if (null == mReview) {
+            mReview = reviewList;
+        } else {
+            mReview.addAll(reviewList);
+        }
+        notifyDataSetChanged();
+    }
+
+    /**
+     * Getter method for the Review List Object
+     *
+     * @return the Review List
+     */
+    public List<Review> getReviewsData() {
+        return mReview;
     }
 }

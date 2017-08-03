@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Parcelable;
 import android.provider.MediaStore;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.CoordinatorLayout;
@@ -93,6 +94,8 @@ public class DetailsActivity extends AppCompatActivity {
     private VideoResponse videoResponse;
     private FloatingActionButton fab;
     private boolean check;
+    private static final String BUNDLE_VIDEOS_KEY = "videoList";
+    private static final String BUNDLE_REVIEWS_KEY = "reviewList";
 
     //List<Videos> mVideo;
 
@@ -182,6 +185,17 @@ public class DetailsActivity extends AppCompatActivity {
 
         setupSharedPreferences();
         setupFloatingActionButton();
+
+        if (null != savedInstanceState){
+            ArrayList<Videos> videoList = savedInstanceState.getParcelableArrayList(BUNDLE_VIDEOS_KEY);
+            mTrailerAdapter = new TrailerAdapter(getApplicationContext(),videoList);
+
+            ArrayList<Review> reviewsList = savedInstanceState.getParcelableArrayList(BUNDLE_REVIEWS_KEY);
+            mReviewAdapter = new ReviewAdapter(getApplicationContext(), reviewsList);
+        }else {
+            getReviewsFromAPI(mMovie_id);
+            getTrailerFromAPI(mMovie_id);
+        }
     }
 
     private void setupSharedPreferences() {
@@ -292,6 +306,43 @@ public class DetailsActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        mTrailerAdapter = new TrailerAdapter();
+        List<Videos> videosList = mTrailerAdapter.getVideosData();
+        if (null != videosList){
+            ArrayList<Videos> videoArrayList = new ArrayList<>(videosList);
+            outState.putParcelableArrayList(BUNDLE_VIDEOS_KEY, (ArrayList<? extends Parcelable>) videoArrayList);
+        }
+
+        mReviewAdapter = new ReviewAdapter();
+
+        List<Review> reviewsList = mReviewAdapter.getReviewsData();
+        if (null != reviewsList){
+            ArrayList<Review> reviewArrayList = new ArrayList<>(reviewsList);
+            outState.putParcelableArrayList(BUNDLE_REVIEWS_KEY, (ArrayList<? extends Parcelable>) reviewArrayList);
+        }
+
+        outState.putIntArray("SCROLL_POSITION", new int[]{mDetailLayout.getScrollX(), mDetailLayout.getScrollY()});
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+
+        final int[] position = savedInstanceState.getIntArray("SCROLL_POSITION");
+        if (position != null){
+            mDetailLayout.post(new Runnable() {
+                @Override
+                public void run() {
+                    mDetailLayout.scrollTo(position[0], position[1]);
+                }
+            });
+        }
     }
 
     private void passDataToAdapter(ReviewResponse reviewResponse) {

@@ -1,12 +1,15 @@
 package challenge.github.alc.com.popularmoveapp2.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 /**
  * Created by Gino Osahon on 19/06/2017.
  */
-public class Videos {
+public class Videos implements Parcelable{
 
     @SerializedName("id")
     @Expose
@@ -32,6 +35,50 @@ public class Videos {
     @SerializedName("type")
     @Expose
     private String type;
+
+    public Videos(){
+
+    }
+
+    public Videos (Parcel parcel){
+        this.id = parcel.readString();
+        this.iso6391 = parcel.readString();
+        this.key = parcel.readString();
+        this.name = parcel.readString();
+        this.site = parcel.readString();
+        this.size = parcel.readInt();
+        this.type = parcel.readString();
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeString(id);
+        parcel.writeString(iso6391);
+        parcel.writeString(key);
+        parcel.writeString(name);
+        parcel.writeString(site);
+        parcel.writeInt(size);
+        parcel.writeString(type);
+    }
+
+    public static final Parcelable.Creator<Videos> CREATOR = new Parcelable.Creator<Videos>(){
+        @Override
+        public Videos createFromParcel(Parcel parcel) {
+            return new Videos(parcel);
+        }
+
+        @Override
+        public Videos[] newArray(int size) {
+            return new Videos[size];
+        }
+    };
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+
 
     public String getId() {
         return id;

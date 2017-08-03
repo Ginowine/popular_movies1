@@ -60,7 +60,7 @@ public class DetailsActivity extends AppCompatActivity {
 
     private static final String REVIEW = "reviews";
     private static final String TRAILERS = "videos";
-    public static final String API_KEY = "232c7933fb923517762fbaba80f80ba9";
+    public static final String API_KEY = "PUT YOUR API KEY HERE";
 
     private TextView overview, release_date_txt, rating_txt, movie_title;
     //private Uri movie_id;

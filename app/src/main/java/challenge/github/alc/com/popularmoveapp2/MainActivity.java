@@ -44,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
     public String mSort = POPULAR;
     public String mSorting;
 
-    public static final String API_KEY = "232c7933fb923517762fbaba80f80ba9";
+    public static final String API_KEY = "PUT YOUR API KEY HERE";
     public static String BASE_URL = "https://api.themoviedb.org/3/";
 
     private static Retrofit retrofit = null;
